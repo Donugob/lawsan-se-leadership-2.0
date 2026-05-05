@@ -55,7 +55,6 @@ export default async function TransactionsPage({
             className="w-full pl-10 pr-4 py-2.5 bg-forest-50 border border-forest-100 rounded-xl focus:outline-none focus:ring-2 focus:ring-gold-500 transition-all"
           />
         </form>
-      </div>
         <div className="flex gap-2">
           <button className="flex items-center gap-2 bg-white border border-forest-200 px-4 py-2.5 rounded-xl text-forest-700 font-medium hover:bg-forest-50 transition-colors">
             <Filter className="w-4 h-4" />
