@@ -8,6 +8,7 @@ datasource db {
 
 model Delegate {
   id            String   @id @default(cuid())
+  regId         String?  @unique // LLC-XXXXX
   firstName     String
   lastName      String
   email         String   @unique
@@ -29,6 +30,22 @@ model Delegate {
   amount        Int      @default(5000)
   status        String   @default("pending") // pending, paid, failed
   paystackRef   String?  @unique
+  
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+model Transaction {
+  id            String   @id @default(cuid())
+  reference     String   @unique
+  email         String
+  amount        Int
+  status        String   // success, abandoned, failed, reversed
+  channel       String?
+  currency      String?
+  ipAddress     String?
+  paidAt        DateTime?
+  metadata      Json?
   
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt

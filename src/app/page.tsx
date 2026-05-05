@@ -128,7 +128,7 @@ export default function LandingPage() {
             <div className="relative aspect-[4/5] rounded-[4rem] overflow-hidden shadow-3xl">
               <div className="absolute inset-0 bg-forest-900/10 mix-blend-overlay" />
               <img
-                src="https://images.unsplash.com/photo-1589829545856-d10d557cf95f?q=80&w=2070&auto=format&fit=crop"
+                src="https://i.postimg.cc/NfXJpGWX/about-mission.jpg"
                 alt="Law"
                 className="w-full h-full object-cover"
               />

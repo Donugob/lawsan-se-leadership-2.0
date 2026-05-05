@@ -11,6 +11,7 @@ async function getDelegates(search?: string): Promise<Delegate[]> {
           { firstName: { contains: search, mode: 'insensitive' } },
           { lastName: { contains: search, mode: 'insensitive' } },
           { email: { contains: search, mode: 'insensitive' } },
+          { regId: { contains: search, mode: 'insensitive' } },
         ]
       } : {},
       orderBy: { createdAt: "desc" }
@@ -52,7 +53,7 @@ export default async function DelegatesPage({
           <input 
             name="q"
             defaultValue={query}
-            placeholder="Search delegates by name or email..." 
+            placeholder="Search by name, email or Reg ID..." 
             className="w-full pl-10 pr-4 py-2.5 bg-forest-50 border border-forest-100 rounded-xl focus:outline-none focus:ring-2 focus:ring-gold-500 focus:border-transparent transition-all"
           />
         </form>
@@ -70,6 +71,7 @@ export default async function DelegatesPage({
           <table className="w-full text-left border-collapse">
             <thead>
               <tr className="bg-forest-50/50 border-b border-forest-100 text-forest-500 text-xs uppercase tracking-wider">
+                <th className="p-6 font-semibold">Reg ID</th>
                 <th className="p-6 font-semibold">Name & Contact</th>
                 <th className="p-6 font-semibold">Affiliation</th>
                 <th className="p-6 font-semibold">Zone Status</th>
@@ -80,7 +82,7 @@ export default async function DelegatesPage({
             <tbody className="divide-y divide-forest-50">
               {delegates.length === 0 ? (
                 <tr>
-                  <td colSpan={5} className="p-20 text-center text-forest-400">
+                  <td colSpan={6} className="p-20 text-center text-forest-400">
                     <div className="flex flex-col items-center gap-4">
                       <Search className="w-12 h-12 opacity-20" />
                       <p>No delegates found in the system yet.</p>
@@ -90,6 +92,11 @@ export default async function DelegatesPage({
               ) : (
                 delegates.map((delegate) => (
                   <tr key={delegate.id} className="hover:bg-forest-50/30 transition-colors group">
+                    <td className="p-6">
+                      <span className="font-mono text-xs font-bold text-forest-900 bg-forest-50 px-3 py-1.5 rounded-lg border border-forest-100 group-hover:border-gold-300 transition-all">
+                        {delegate.regId || "N/A"}
+                      </span>
+                    </td>
                     <td className="p-6">
                       <div className="flex flex-col">
                         <span className="font-bold text-forest-900">{delegate.firstName} {delegate.lastName}</span>

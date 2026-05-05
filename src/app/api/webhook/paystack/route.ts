@@ -24,13 +24,35 @@ export async function POST(req: Request) {
     }
 
     const event = JSON.parse(body);
-    console.log(`📩 Paystack Webhook Received: ${event.event}`);
+    const data = event.data;
+    
+    // 1. Audit Trail: Log every event into Transaction table
+    if (data?.reference) {
+      await prisma.transaction.upsert({
+        where: { reference: data.reference },
+        update: {
+          status: event.event === 'charge.success' ? 'success' : (data.status || 'event_received'),
+          metadata: data
+        },
+        create: {
+          reference: data.reference,
+          email: data.customer?.email || "unknown",
+          amount: data.amount ? data.amount / 100 : 0,
+          status: event.event === 'charge.success' ? 'success' : (data.status || 'event_received'),
+          channel: data.channel,
+          currency: data.currency,
+          ipAddress: data.ip_address,
+          paidAt: data.paid_at ? new Date(data.paid_at) : null,
+          metadata: data
+        }
+      });
+      console.log(`📝 Transaction Logged: ${data.reference} [${event.event}]`);
+    }
 
+    // 2. Business Logic: Update Delegate status
     if (event.event === "charge.success") {
-      const { reference, customer, amount } = event.data;
+      const { reference, customer } = data;
       const email = customer.email;
-
-      console.log(`✅ Payment SUCCESS for ${email}. Reference: ${reference}. Amount: ${amount / 100} NGN`);
 
       await prisma.delegate.update({
         where: { email },
@@ -40,7 +62,7 @@ export async function POST(req: Request) {
         }
       });
       
-      console.log(`💾 Database UPDATED: ${email} marked as PAID.`);
+      console.log(`✅ Delegate Verified: ${email} marked as PAID.`);
     }
 
     return NextResponse.json({ received: true });
