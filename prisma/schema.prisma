@@ -1,0 +1,35 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Delegate {
+  id            String   @id @default(cuid())
+  firstName     String
+  lastName      String
+  email         String   @unique
+  phone         String
+  
+  isStudent     Boolean
+  isLawStudent  Boolean?
+  isSouthEast   Boolean?
+  
+  // Student fields
+  university    String?
+  level         String?
+  
+  // Professional fields
+  profession    String?
+  organization  String?
+  
+  // Payment info
+  amount        Int      @default(5000)
+  status        String   @default("pending") // pending, paid, failed
+  paystackRef   String?  @unique
+  
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}

@@ -1,65 +1,450 @@
-import Image from "next/image";
+"use client";
 
-export default function Home() {
+import { motion, useScroll, useTransform } from "framer-motion";
+import {
+  ArrowRight,
+  ChevronDown,
+  MapPin,
+  Calendar,
+  Globe,
+  Shield,
+  Scale,
+  Users,
+  MessageSquare,
+  GraduationCap
+} from "lucide-react";
+import Link from "next/link";
+import { useRef } from "react";
+
+const fadeIn = {
+  initial: { opacity: 0, y: 30 },
+  animate: { opacity: 1, y: 0 },
+  transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] }
+};
+
+const stagger = {
+  animate: {
+    transition: {
+      staggerChildren: 0.1
+    }
+  }
+};
+
+export default function LandingPage() {
+  const containerRef = useRef(null);
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start start", "end start"]
+  });
+
+  const y1 = useTransform(scrollYProgress, [0, 1], [0, 200]);
+  const opacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+    <div ref={containerRef} className="bg-cream min-h-screen selection:bg-gold-500 selection:text-white">
+      {/* Navigation */}
+      <nav className="fixed top-0 w-full z-50 px-6 py-8">
+        <div className="max-w-7xl mx-auto flex justify-between items-center bg-white/70 backdrop-blur-xl border border-forest-100/50 px-8 py-4 rounded-3xl shadow-sm">
+          <Link href="/" className="flex items-center gap-3 group">
+            <div className="w-10 h-10 bg-forest-900 rounded-xl flex items-center justify-center transition-transform group-hover:rotate-12">
+              <span className="text-gold-400 font-heading font-bold text-xl">L</span>
+            </div>
+            <div>
+              <span className="font-heading font-bold text-forest-950 tracking-tight text-xl block leading-none">LAWSAN SE</span>
+              <span className="text-[10px] text-forest-500 uppercase tracking-widest font-bold">Leadership 2.0</span>
+            </div>
+          </Link>
+
+          <div className="hidden md:flex items-center gap-10">
+            {['About', 'Vision', 'Venue', 'FAQ'].map((item) => (
+              <Link
+                key={item}
+                href={`#${item.toLowerCase()}`}
+                className="text-xs font-bold uppercase tracking-widest text-forest-700 hover:text-gold-600 transition-colors"
+              >
+                {item}
+              </Link>
+            ))}
+          </div>
+
+          <Link
+            href="/register"
+            className="bg-forest-900 text-white px-6 py-3 rounded-2xl text-sm font-bold hover:bg-forest-800 hover:scale-105 transition-all shadow-xl shadow-forest-900/10"
           >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+            Register Now
+          </Link>
         </div>
-      </main>
+      </nav>
+
+      {/* Hero Section - Split Layout */}
+      <section className="relative min-h-screen flex items-center pt-20 overflow-hidden">
+        <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-12 px-6 items-center">
+          <motion.div
+            initial="initial"
+            animate="animate"
+            variants={stagger}
+            className="relative z-10"
+          >
+            <motion.div variants={fadeIn} className="inline-flex items-center gap-2 border border-gold-500/30 px-5 py-2 rounded-full text-gold-600 text-[10px] font-bold tracking-widest uppercase mb-8 bg-gold-500/5">
+              <span className="w-2 h-2 bg-gold-500 rounded-full animate-pulse" />
+              The Council of Chapter Presidents Presents
+            </motion.div>
+
+            <motion.h1 variants={fadeIn} className="text-6xl md:text-8xl font-heading font-bold text-forest-950 leading-[0.9] mb-8">
+              Emerging <br />
+              <span className="text-gold-500 italic">Lawyers</span> <br />
+              Emerging <br />
+              <span className="text-forest-800">Realities</span>
+            </motion.h1>
+
+            <motion.p variants={fadeIn} className="text-xl text-forest-600 max-w-lg leading-relaxed font-light mb-10">
+              A monumental convergence in the heart of the South East. Bypassing political noise to focus on the raw future of legal excellence.
+            </motion.p>
+
+            <motion.div variants={fadeIn} className="flex flex-col sm:flex-row gap-6">
+              <Link href="/register" className="group bg-forest-900 text-white px-8 py-5 rounded-2xl font-bold flex items-center justify-center gap-3 hover:bg-forest-950 transition-all shadow-2xl shadow-forest-900/20">
+                Secure Your Pass
+                <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-1" />
+              </Link>
+              <div className="flex items-center gap-4 px-6">
+                <div className="flex -space-x-4">
+                  {[1, 2, 3, 4].map(i => (
+                    <div key={i} className="w-10 h-10 rounded-full border-2 border-white bg-forest-100 overflow-hidden shadow-sm">
+                      <img src={`https://i.pravatar.cc/150?u=${i}`} alt="Attendee" className="w-full h-full object-cover" />
+                    </div>
+                  ))}
+                </div>
+                <p className="text-xs text-forest-400 font-bold uppercase tracking-widest">
+                  800+ Registered
+                </p>
+              </div>
+            </motion.div>
+          </motion.div>
+
+          <motion.div
+            style={{ y: y1, opacity }}
+            className="relative hidden lg:block"
+          >
+            <div className="relative aspect-[4/5] rounded-[4rem] overflow-hidden shadow-3xl">
+              <div className="absolute inset-0 bg-forest-900/10 mix-blend-overlay" />
+              <img
+                src="https://images.unsplash.com/photo-1589829545856-d10d557cf95f?q=80&w=2070&auto=format&fit=crop"
+                alt="Law"
+                className="w-full h-full object-cover"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-forest-950/60 to-transparent" />
+
+              <div className="absolute bottom-12 left-12 right-12 flex justify-between items-end">
+                <div className="text-white">
+                  <p className="text-[10px] uppercase tracking-widest font-bold opacity-60 mb-2">Host Institution</p>
+                  <p className="text-2xl font-heading font-bold">Godfrey Okoye University</p>
+                </div>
+                <div className="w-16 h-16 bg-gold-500 rounded-3xl flex items-center justify-center rotate-12 shadow-xl">
+                  <Scale className="w-8 h-8 text-forest-900" />
+                </div>
+              </div>
+            </div>
+
+            {/* Abstract Elements */}
+            <div className="absolute -top-12 -right-12 w-48 h-48 bg-gold-100/50 rounded-full blur-3xl -z-10" />
+            <div className="absolute -bottom-12 -left-12 w-64 h-64 bg-forest-100 rounded-[3rem] -z-10 rotate-12" />
+          </motion.div>
+        </div>
+
+        {/* Ghost Text */}
+        <div className="absolute bottom-10 left-10 text-[15rem] font-heading font-bold text-forest-900/[0.02] select-none leading-none -z-10 pointer-events-none">
+          LAWSAN
+        </div>
+      </section>
+
+      {/* Metrics Bar */}
+      <section className="bg-forest-900 py-16 px-6 overflow-hidden relative">
+        <div className="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-12">
+          {[
+            { label: "Host City", val: "Enugu", icon: MapPin },
+            { label: "Attendance", val: "1k+", icon: Users },
+            { label: "Status", val: "Live", icon: Globe },
+            { label: "Registration", val: "Ongoing", icon: Calendar },
+          ].map((item, i) => (
+            <motion.div
+              key={i}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: i * 0.1 }}
+              className="flex items-center gap-5"
+            >
+              <div className="w-12 h-12 rounded-2xl bg-forest-800 flex items-center justify-center border border-forest-700">
+                <item.icon className="w-5 h-5 text-gold-400" />
+              </div>
+              <div>
+                <p className="text-[10px] text-forest-400 uppercase tracking-widest font-bold">{item.label}</p>
+                <p className="text-xl font-heading font-bold text-white">{item.val}</p>
+              </div>
+            </motion.div>
+          ))}
+        </div>
+      </section>
+
+      {/* The Council Section - Editorial Layout */}
+      <section id="about" className="py-40 px-6 relative overflow-hidden bg-white">
+        <div className="max-w-7xl mx-auto">
+          <div className="grid lg:grid-cols-12 gap-16 items-start">
+            <div className="lg:col-span-5 space-y-12">
+              <motion.div
+                initial={{ opacity: 0, x: -50 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 1 }}
+              >
+                <div className="inline-block px-4 py-1.5 rounded-full bg-forest-50 text-forest-900 text-xs font-bold tracking-widest uppercase mb-8">
+                  The Visionaries
+                </div>
+                <h2 className="text-5xl md:text-7xl font-heading font-bold text-forest-950 leading-[1.1] mb-8">
+                  Orchestrated <br />
+                  by the <span className="text-gold-500 italic">Council</span>
+                </h2>
+                <div className="space-y-6 text-xl text-forest-600 font-light leading-relaxed">
+                  <p>
+                    This edition bypasses traditional structures. Orchestrated exclusively by the esteemed <span className="text-forest-950 font-bold">Council of Chapter Presidents</span>, we focus purely on the raw future of legal growth.
+                  </p>
+                  <p>
+                    It is a testament to unified leadership. A convergence designed not just for law students, but for the visionaries of the modern world.
+                  </p>
+                </div>
+              </motion.div>
+
+              <motion.div
+                initial={{ opacity: 0, y: 40 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                className="p-10 bg-forest-50 rounded-[3rem] border border-forest-100 relative"
+              >
+                <div className="absolute top-0 right-0 p-8">
+                  <Users className="w-12 h-12 text-forest-200" />
+                </div>
+                <p className="text-3xl font-heading font-bold text-forest-900 mb-4">Value First.</p>
+                <p className="text-forest-500 leading-relaxed">
+                  Every session, workshop, and keynote is curated to deliver immediate professional value.
+                </p>
+              </motion.div>
+            </div>
+
+            <div className="lg:col-span-7 grid grid-cols-2 gap-6 md:gap-10">
+              <motion.div
+                initial={{ opacity: 0, y: 100 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 1 }}
+                className="space-y-6 md:pt-24"
+              >
+                <div className="aspect-[3/4] rounded-[3rem] overflow-hidden bg-forest-900 relative shadow-2xl">
+                  <img src="https://images.unsplash.com/photo-1505664194779-8beaceb93744?q=80&w=2070" className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700" alt="Law" />
+                  <div className="absolute inset-0 bg-forest-950/20" />
+                </div>
+                <div className="p-4">
+                  <p className="text-xs font-bold text-gold-600 uppercase tracking-widest mb-2">Conference Pillar</p>
+                  <p className="text-2xl font-heading font-bold text-forest-950">Ethical Leadership</p>
+                </div>
+              </motion.div>
+
+              <motion.div
+                initial={{ opacity: 0, y: -100 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 1 }}
+                className="space-y-6"
+              >
+                <div className="aspect-[3/4] rounded-[3rem] overflow-hidden bg-forest-900 relative shadow-2xl">
+                  <img src="https://images.unsplash.com/photo-1505664194779-8beaceb93744?q=80&w=2070" className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700" alt="Law" />
+                  <div className="absolute inset-0 bg-forest-950/20" />
+                </div>
+                <div className="p-4">
+                  <p className="text-xs font-bold text-gold-600 uppercase tracking-widest mb-2">Core Focus</p>
+                  <p className="text-2xl font-heading font-bold text-forest-950">Legal Innovation</p>
+                </div>
+              </motion.div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Vision Tracks */}
+      <section id="vision" className="py-40 bg-forest-950 text-white relative overflow-hidden">
+        <div className="absolute top-0 left-0 w-full h-full opacity-10 pointer-events-none">
+          <div className="absolute inset-0" style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, #dcc673 1px, transparent 0)', backgroundSize: '40px 40px' }} />
+        </div>
+
+        <div className="max-w-7xl mx-auto px-6 relative z-10">
+          <div className="max-w-3xl mb-24">
+            <h2 className="text-5xl md:text-7xl font-heading font-bold mb-8">
+              The Realities of <br />
+              <span className="text-gold-400">Tomorrow.</span>
+            </h2>
+            <p className="text-xl text-forest-200 font-light leading-relaxed">
+              We aren't just discussing the law; we are analyzing the shifts that will define the next decade of the legal industry.
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-10">
+            {[
+              {
+                title: "Artificial Intelligence",
+                desc: "The impact of LLMs and automation on standard legal practice.",
+                icon: Globe
+              },
+              {
+                title: "Digital Sovereignty",
+                desc: "Navigating cross-border laws in an increasingly borderless internet.",
+                icon: Shield
+              },
+              {
+                title: "Economic Justice",
+                desc: "Leveraging legal tools to bridge the gap in South East's commerce.",
+                icon: Scale
+              },
+            ].map((track, i) => (
+              <motion.div
+                key={i}
+                whileHover={{ y: -10 }}
+                className="p-10 bg-white/5 backdrop-blur-sm border border-white/10 rounded-[3rem] hover:bg-white/10 transition-all"
+              >
+                <div className="w-16 h-16 bg-gold-500 rounded-3xl flex items-center justify-center mb-10 shadow-lg rotate-6">
+                  <track.icon className="w-8 h-8 text-forest-950" />
+                </div>
+                <h3 className="text-2xl font-heading font-bold mb-4">{track.title}</h3>
+                <p className="text-forest-300 leading-relaxed font-light">{track.desc}</p>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Venue Section */}
+      <section id="venue" className="py-40 px-6 bg-cream">
+        <div className="max-w-7xl mx-auto">
+          <div className="flex flex-col lg:flex-row gap-20 items-center">
+            <div className="flex-1 order-2 lg:order-1">
+              <div className="relative">
+                <motion.div
+                  initial={{ scale: 0.9, opacity: 0 }}
+                  whileInView={{ scale: 1, opacity: 1 }}
+                  className="rounded-[4rem] overflow-hidden shadow-3xl"
+                >
+                  <img src="https://images.unsplash.com/photo-1592280771190-3e2e4d571952?q=80&w=2070" alt="University" className="w-full aspect-video object-cover" />
+                </motion.div>
+                <div className="absolute -bottom-10 -right-10 bg-forest-900 text-white p-12 rounded-[3rem] shadow-2xl hidden md:block">
+                  <p className="text-4xl font-heading font-bold text-gold-400 mb-2">Enugu</p>
+                  <p className="text-sm font-bold uppercase tracking-widest opacity-60">The Coal City State</p>
+                </div>
+              </div>
+            </div>
+
+            <div className="flex-1 space-y-10 order-1 lg:order-2">
+              <div className="inline-block px-4 py-1.5 rounded-full bg-forest-100 text-forest-900 text-xs font-bold tracking-widest uppercase">
+                The Host City
+              </div>
+              <h2 className="text-5xl md:text-7xl font-heading font-bold text-forest-950 leading-tight">
+                A Hub of <br />
+                <span className="text-gold-600">Innovation.</span>
+              </h2>
+              <p className="text-xl text-forest-600 leading-relaxed font-light">
+                Godfrey Okoye University, Enugu, serves as our visionary stage. A place where tradition meets the cutting edge of academic excellence.
+              </p>
+              <div className="flex flex-col gap-6">
+                <div className="flex items-center gap-4">
+                  <div className="w-10 h-10 rounded-full bg-forest-900 flex items-center justify-center text-gold-400">
+                    <MapPin className="w-5 h-5" />
+                  </div>
+                  <span className="text-forest-950 font-bold">Thinker's Corner, Enugu</span>
+                </div>
+                <div className="flex items-center gap-4">
+                  <div className="w-10 h-10 rounded-full bg-forest-900 flex items-center justify-center text-gold-400">
+                    <Calendar className="w-5 h-5" />
+                  </div>
+                  <span className="text-forest-950 font-bold">July 2026 (Registration Live)</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* FAQ Section */}
+      <section id="faq" className="py-40 px-6 bg-white">
+        <div className="max-w-4xl mx-auto">
+          <div className="text-center mb-24">
+            <h2 className="text-5xl font-heading font-bold text-forest-950 mb-6">Common Questions</h2>
+            <p className="text-forest-500">Everything you need to know about the 2.0 experience.</p>
+          </div>
+
+          <div className="space-y-6">
+            {[
+              { q: "Who can attend the conference?", a: "The conference is open to all Law Students, Legal Professionals, and anyone interested in the intersection of law and technology." },
+              { q: "What does the registration fee cover?", a: "Your ₦5,000 fee covers the conference pass, official delegate materials, and access to all workshop sessions." },
+              { q: "Will certificates be provided?", a: "Yes, all verified attendees will receive a Certificate of Participation signed by the Council of Chapter Presidents." },
+            ].map((faq, i) => (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                className="p-8 border border-forest-100 rounded-[2.5rem] hover:border-gold-300 transition-colors bg-forest-50/20"
+              >
+                <h4 className="text-lg font-bold text-forest-900 mb-4">{faq.q}</h4>
+                <p className="text-forest-600 font-light leading-relaxed">{faq.a}</p>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Final CTA */}
+      <section className="py-20 px-6">
+        <div className="max-w-7xl mx-auto">
+          <div className="bg-forest-900 rounded-[4rem] p-12 md:p-24 text-center relative overflow-hidden shadow-3xl">
+            <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-gold-500/20 to-transparent opacity-50" />
+            <div className="relative z-10">
+              <h2 className="text-5xl md:text-8xl font-heading font-bold text-white mb-10 leading-none">
+                Be Part of <br />
+                the <span className="text-gold-400 italic">Future.</span>
+              </h2>
+              <div className="flex flex-col sm:flex-row gap-6 justify-center">
+                <Link href="/register" className="bg-gold-500 text-forest-950 px-10 py-6 rounded-2xl font-bold text-xl hover:bg-gold-400 hover:scale-105 transition-all shadow-xl shadow-gold-500/20">
+                  Register Now — ₦5,000
+                </Link>
+                <Link href="#about" className="border-2 border-white/30 text-white px-10 py-6 rounded-2xl font-bold text-xl hover:bg-white/10 transition-all">
+                  Learn More
+                </Link>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Footer */}
+      <footer className="py-20 px-6 border-t border-forest-100 bg-white">
+        <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-10">
+          <div className="flex items-center gap-3">
+            <div className="w-12 h-12 bg-forest-900 rounded-2xl flex items-center justify-center">
+              <span className="text-gold-400 font-heading font-bold text-2xl">L</span>
+            </div>
+            <div>
+              <span className="font-heading font-bold text-forest-950 text-2xl block leading-none">LAWSAN SE</span>
+              <span className="text-xs text-forest-500 uppercase tracking-widest font-bold">Leadership 2.0</span>
+            </div>
+          </div>
+
+          <div className="flex gap-10">
+            <Link href="/admin" className="text-xs font-bold uppercase tracking-widest text-forest-400 hover:text-gold-600 transition-colors">
+              Admin Portal
+            </Link>
+            <span className="text-xs font-bold uppercase tracking-widest text-forest-300">
+              © 2026 LAWSAN SE Zone
+            </span>
+          </div>
+        </div>
+      </footer>
     </div>
   );
 }
