@@ -2,17 +2,21 @@ import prisma from "@/lib/prisma";
 import AdminDashboardClient from "@/components/admin/DashboardClient";
 
 async function getStats() {
-  const [total, paid, pending] = await Promise.all([
+  const [total, paid, pending, revenueResult] = await Promise.all([
     prisma.delegate.count(),
     prisma.delegate.count({ where: { status: "paid" } }),
     prisma.delegate.count({ where: { status: "pending" } }),
+    prisma.delegate.aggregate({
+      _sum: { amount: true },
+      where: { status: "paid" }
+    })
   ]);
 
   return { 
     total, 
     paid, 
     pending, 
-    revenue: paid * 5000 
+    revenue: revenueResult._sum.amount || 0 
   };
 }
 

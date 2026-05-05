@@ -3,9 +3,16 @@ import prisma from "@/lib/prisma";
 import { Delegate } from "@prisma/client";
 
 // Explicitly type the return as Promise<Delegate[]>
-async function getDelegates(): Promise<Delegate[]> {
+async function getDelegates(search?: string): Promise<Delegate[]> {
   try {
     const delegates = await prisma.delegate.findMany({
+      where: search ? {
+        OR: [
+          { firstName: { contains: search, mode: 'insensitive' } },
+          { lastName: { contains: search, mode: 'insensitive' } },
+          { email: { contains: search, mode: 'insensitive' } },
+        ]
+      } : {},
       orderBy: { createdAt: "desc" }
     });
     return delegates;
@@ -14,37 +21,42 @@ async function getDelegates(): Promise<Delegate[]> {
   }
 }
 
-export default async function DelegatesPage() {
-  const delegates = await getDelegates();
+export default async function DelegatesPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>
+}) {
+  const params = await searchParams;
+  const query = typeof params.q === 'string' ? params.q : undefined;
+  const delegates = await getDelegates(query);
 
   return (
     <div className="space-y-6">
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
         <div>
           <h1 className="text-2xl font-heading font-bold text-forest-950">Conference Delegates</h1>
-          <p className="text-forest-500 text-sm">Manage and track all registered participants.</p>
+          <p className="text-forest-500 text-sm">Manage and track all {delegates.length} registered participants.</p>
         </div>
         <div className="flex gap-3 w-full md:w-auto">
           <button className="flex-1 md:flex-none flex items-center justify-center gap-2 bg-white border border-forest-200 px-4 py-2.5 rounded-xl text-forest-700 font-medium hover:bg-forest-50 transition-colors shadow-sm">
             <Download className="w-4 h-4" />
             Export CSV
           </button>
-          <button className="flex-1 md:flex-none flex items-center justify-center gap-2 bg-forest-900 text-gold-400 px-4 py-2.5 rounded-xl font-bold hover:bg-forest-800 transition-colors shadow-lg shadow-forest-900/10">
-            <UserPlus className="w-4 h-4" />
-            Add New
-          </button>
         </div>
       </div>
 
       {/* Filters Bar */}
       <div className="bg-white p-4 rounded-2xl border border-forest-100 shadow-sm flex flex-col md:flex-row gap-4">
-        <div className="flex-1 relative">
+        <form className="flex-1 relative">
           <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-forest-400" />
           <input 
+            name="q"
+            defaultValue={query}
             placeholder="Search delegates by name or email..." 
             className="w-full pl-10 pr-4 py-2.5 bg-forest-50 border border-forest-100 rounded-xl focus:outline-none focus:ring-2 focus:ring-gold-500 focus:border-transparent transition-all"
           />
-        </div>
+        </form>
+      </div>
         <div className="flex gap-2">
           <button className="flex items-center gap-2 bg-white border border-forest-200 px-4 py-2.5 rounded-xl text-forest-700 font-medium hover:bg-forest-50 transition-colors">
             <Filter className="w-4 h-4" />
