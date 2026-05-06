@@ -2,26 +2,37 @@ import prisma from "@/lib/prisma";
 import AdminDashboardClient from "@/components/admin/DashboardClient";
 
 async function getStats() {
-  const [total, paid, pending, revenueResult] = await Promise.all([
-    prisma.delegate.count(),
-    prisma.delegate.count({ where: { status: "paid" } }),
-    prisma.delegate.count({ where: { status: "pending" } }),
-    prisma.delegate.aggregate({
-      _sum: { amount: true },
-      where: { status: "paid" }
-    })
-  ]);
+  const paidDelegates = await prisma.delegate.findMany({
+    where: { status: "paid" },
+    select: { amount: true }
+  });
+
+  const pending = await prisma.delegate.count({
+    where: { status: "pending" }
+  });
+
+  const grossRevenue = paidDelegates.reduce((sum, d) => sum + d.amount, 0);
+  
+  // Paystack fee: 1.5% + 100 (capped at 2000)
+  // Note: For simplicity and following user request, we use 1.5% + 100
+  const netRevenue = paidDelegates.reduce((sum, d) => {
+    const fee = (d.amount * 0.015) + 100;
+    const cappedFee = Math.min(fee, 2000);
+    return sum + (d.amount - cappedFee);
+  }, 0);
 
   return { 
-    total, 
-    paid, 
+    total: paidDelegates.length, // Only paid delegates are counted as 'delegates'
+    paid: paidDelegates.length, 
     pending, 
-    revenue: revenueResult._sum.amount || 0 
+    revenue: grossRevenue,
+    netRevenue: Math.round(netRevenue)
   };
 }
 
 async function getRecentDelegates() {
   return await prisma.delegate.findMany({
+    where: { status: "paid" },
     take: 5,
     orderBy: { createdAt: "desc" }
   });

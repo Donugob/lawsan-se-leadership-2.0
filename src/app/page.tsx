@@ -41,7 +41,7 @@ export default function LandingPage() {
   const opacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
 
   return (
-    <div ref={containerRef} className="bg-cream min-h-screen selection:bg-gold-500 selection:text-white">
+    <div ref={containerRef} className="bg-cream min-h-screen selection:bg-gold-500 selection:text-white scroll-pt-32 md:scroll-pt-40">
       {/* Navigation */}
       <nav className="fixed top-0 w-full z-50 px-6 py-8">
         <div className="max-w-7xl mx-auto flex justify-between items-center bg-white/70 backdrop-blur-xl border border-forest-100/50 px-8 py-4 rounded-3xl shadow-sm">
@@ -77,7 +77,7 @@ export default function LandingPage() {
       </nav>
 
       {/* Hero Section - Split Layout */}
-      <section className="relative min-h-screen flex items-center pt-20 overflow-hidden">
+      <section className="relative min-h-screen flex items-center pt-40 pb-20 overflow-hidden">
         <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-12 px-6 items-center">
           <motion.div
             initial="initial"
@@ -162,24 +162,41 @@ export default function LandingPage() {
         <div className="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-12">
           {[
             { label: "Host City", val: "Enugu", icon: MapPin },
-            { label: "Attendance", val: "1k+", icon: Users },
+            { label: "Delegates Expected", val: "1k+", icon: Users },
             { label: "Status", val: "Live", icon: Globe },
             { label: "Registration", val: "Ongoing", icon: Calendar },
           ].map((item, i) => (
             <motion.div
               key={i}
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ delay: i * 0.1 }}
-              className="flex items-center gap-5"
+              // 1. Swapped default ease for a snappy spring animation
+              transition={{ type: "spring", stiffness: 100, damping: 12, delay: i * 0.1 }}
+              // 2. Added a string variant trigger for the child icon
+              whileHover="hover"
+              className="flex items-center gap-5 cursor-default group"
             >
-              <div className="w-12 h-12 rounded-2xl bg-forest-800 flex items-center justify-center border border-forest-700">
-                <item.icon className="w-5 h-5 text-gold-400" />
-              </div>
+              <motion.div
+                // 3. Icon pops up and does a quick dial rotation on hover
+                variants={{
+                  hover: { scale: 1.15, rotate: [0, -15, 10, -5, 0] }
+                }}
+                transition={{ duration: 0.5 }}
+                className="w-12 h-12 rounded-2xl bg-forest-800 flex items-center justify-center border border-forest-700 group-hover:border-gold-500/50 group-hover:bg-forest-700 transition-colors"
+              >
+                <item.icon className="w-5 h-5 text-gold-400 group-hover:text-gold-300 transition-colors" />
+              </motion.div>
               <div>
-                <p className="text-[10px] text-forest-400 uppercase tracking-widest font-bold">{item.label}</p>
-                <p className="text-xl font-heading font-bold text-white">{item.val}</p>
+                <p className="text-[10px] text-forest-400 uppercase tracking-widest font-bold group-hover:text-forest-300 transition-colors">
+                  {item.label}
+                </p>
+                <motion.p
+                  variants={{ hover: { x: 3 } }}
+                  className="text-xl font-heading font-bold text-white group-hover:text-gold-400 transition-all"
+                >
+                  {item.val}
+                </motion.p>
               </div>
             </motion.div>
           ))}
@@ -209,7 +226,7 @@ export default function LandingPage() {
                     This edition bypasses traditional structures. Orchestrated exclusively by the esteemed <span className="text-forest-950 font-bold">Council of Chapter Presidents</span>, we focus purely on the raw future of legal growth.
                   </p>
                   <p>
-                    It is a testament to unified leadership. A convergence designed not just for law students, but for the visionaries of the modern world.
+                    It is a testament to unified leadership. A convergence designed for law students and for the visionaries of the modern world.
                   </p>
                 </div>
               </motion.div>
@@ -225,7 +242,7 @@ export default function LandingPage() {
                 </div>
                 <p className="text-3xl font-heading font-bold text-forest-900 mb-4">Value First.</p>
                 <p className="text-forest-500 leading-relaxed">
-                  Every session, workshop, and keynote is curated to deliver immediate professional value.
+                  Every session and keynote is curated to deliver immediate professional value.
                 </p>
               </motion.div>
             </div>
@@ -239,7 +256,7 @@ export default function LandingPage() {
                 className="space-y-6 md:pt-24"
               >
                 <div className="aspect-[3/4] rounded-[3rem] overflow-hidden bg-forest-900 relative shadow-2xl">
-                  <img src="https://images.unsplash.com/photo-1505664194779-8beaceb93744?q=80&w=2070" className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700" alt="Law" />
+                  <img src="https://i.postimg.cc/fTQSnS7d/hero-bg.jpg" className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700" alt="Law" />
                   <div className="absolute inset-0 bg-forest-950/20" />
                 </div>
                 <div className="p-4">
@@ -256,12 +273,12 @@ export default function LandingPage() {
                 className="space-y-6"
               >
                 <div className="aspect-[3/4] rounded-[3rem] overflow-hidden bg-forest-900 relative shadow-2xl">
-                  <img src="https://images.unsplash.com/photo-1505664194779-8beaceb93744?q=80&w=2070" className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700" alt="Law" />
+                  <img src="https://i.postimg.cc/hPnv3WgX/gavel-placeholder-2.jpg" className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700" alt="Law" />
                   <div className="absolute inset-0 bg-forest-950/20" />
                 </div>
                 <div className="p-4">
                   <p className="text-xs font-bold text-gold-600 uppercase tracking-widest mb-2">Core Focus</p>
-                  <p className="text-2xl font-heading font-bold text-forest-950">Legal Innovation</p>
+                  <p className="text-2xl font-heading font-bold text-forest-950">Innovation</p>
                 </div>
               </motion.div>
             </div>
@@ -270,19 +287,22 @@ export default function LandingPage() {
       </section>
 
       {/* Vision Tracks */}
-      <section id="vision" className="py-40 bg-forest-950 text-white relative overflow-hidden">
+      {/* Removed bg-forest-950 to respect your light background */}
+      <section id="vision" className="py-40 relative overflow-hidden">
         <div className="absolute top-0 left-0 w-full h-full opacity-10 pointer-events-none">
           <div className="absolute inset-0" style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, #dcc673 1px, transparent 0)', backgroundSize: '40px 40px' }} />
         </div>
 
         <div className="max-w-7xl mx-auto px-6 relative z-10">
           <div className="max-w-3xl mb-24">
-            <h2 className="text-5xl md:text-7xl font-heading font-bold mb-8">
+            {/* Changed to text-forest-950 for high contrast */}
+            <h2 className="text-5xl md:text-7xl font-heading font-bold text-forest-950 mb-8">
               The Realities of <br />
-              <span className="text-gold-400">Tomorrow.</span>
+              <span className="text-gold-500">Tomorrow.</span>
             </h2>
-            <p className="text-xl text-forest-200 font-light leading-relaxed">
-              We aren't just discussing the law; we are analyzing the shifts that will define the next decade of the legal industry.
+            {/* Changed to text-forest-600 for readability */}
+            <p className="text-xl text-forest-600 font-light leading-relaxed">
+              We are analyzing the shifts that will define the next decade of the legal industry.
             </p>
           </div>
 
@@ -306,14 +326,40 @@ export default function LandingPage() {
             ].map((track, i) => (
               <motion.div
                 key={i}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.1 }}
                 whileHover={{ y: -10 }}
-                className="p-10 bg-white/5 backdrop-blur-sm border border-white/10 rounded-[3rem] hover:bg-white/10 transition-all"
+                className="p-10 bg-white border border-forest-100 rounded-[3rem] hover:shadow-xl transition-all group cursor-default"
               >
-                <div className="w-16 h-16 bg-gold-500 rounded-3xl flex items-center justify-center mb-10 shadow-lg rotate-6">
-                  <track.icon className="w-8 h-8 text-forest-950" />
-                </div>
-                <h3 className="text-2xl font-heading font-bold mb-4">{track.title}</h3>
-                <p className="text-forest-300 leading-relaxed font-light">{track.desc}</p>
+                {/* ICON ANIMATION WRAPPER */}
+                <motion.div
+                  initial={{ rotate: 6 }}
+                  // Horizontal shake when scrolled into view
+                  whileInView={{
+                    x: [0, -8, 8, -5, 5, -2, 2, 0],
+                    transition: { duration: 0.6, ease: "easeInOut", delay: 0.3 + (i * 0.1) }
+                  }}
+                  // Rotational wiggle on hover
+                  whileHover={{
+                    rotate: [6, -12, 15, -10, 10, 6],
+                    transition: { duration: 0.4 }
+                  }}
+                  viewport={{ once: true }}
+                  className="w-16 h-16 bg-gold-500 rounded-3xl flex items-center justify-center mb-10 shadow-lg origin-center"
+                >
+                  <track.icon className="w-8 h-8 text-white" />
+                </motion.div>
+
+                {/* Changed heading to text-forest-950 */}
+                <h3 className="text-2xl font-heading font-bold text-forest-950 mb-4 group-hover:text-gold-600 transition-colors">
+                  {track.title}
+                </h3>
+                {/* Changed paragraph to text-forest-600 */}
+                <p className="text-forest-600 leading-relaxed font-light">
+                  {track.desc}
+                </p>
               </motion.div>
             ))}
           </div>
@@ -331,7 +377,7 @@ export default function LandingPage() {
                   whileInView={{ scale: 1, opacity: 1 }}
                   className="rounded-[4rem] overflow-hidden shadow-3xl"
                 >
-                  <img src="https://images.unsplash.com/photo-1592280771190-3e2e4d571952?q=80&w=2070" alt="University" className="w-full aspect-video object-cover" />
+                  <img src="https://i.postimg.cc/6qNgwh5Y/GOU.jpg" alt="University" className="w-full aspect-video object-cover" />
                 </motion.div>
                 <div className="absolute -bottom-10 -right-10 bg-forest-900 text-white p-12 rounded-[3rem] shadow-2xl hidden md:block">
                   <p className="text-4xl font-heading font-bold text-gold-400 mb-2">Enugu</p>
@@ -362,7 +408,7 @@ export default function LandingPage() {
                   <div className="w-10 h-10 rounded-full bg-forest-900 flex items-center justify-center text-gold-400">
                     <Calendar className="w-5 h-5" />
                   </div>
-                  <span className="text-forest-950 font-bold">July 2026 (Registration Live)</span>
+                  <span className="text-forest-950 font-bold">2026 (Registration Live)</span>
                 </div>
               </div>
             </div>
@@ -381,7 +427,7 @@ export default function LandingPage() {
           <div className="space-y-6">
             {[
               { q: "Who can attend the conference?", a: "The conference is open to all Law Students, Legal Professionals, and anyone interested in the intersection of law and technology." },
-              { q: "What does the registration fee cover?", a: "Your ₦5,000 fee covers the conference pass, official delegate materials, and access to all workshop sessions." },
+              { q: "What does the registration fee cover?", a: "Your ₦5,000 fee covers the conference pass, official delegate materials, and access to all sessions." },
               { q: "Will certificates be provided?", a: "Yes, all verified attendees will receive a Certificate of Participation signed by the Council of Chapter Presidents." },
             ].map((faq, i) => (
               <motion.div
@@ -411,7 +457,7 @@ export default function LandingPage() {
               </h2>
               <div className="flex flex-col sm:flex-row gap-6 justify-center">
                 <Link href="/register" className="bg-gold-500 text-forest-950 px-10 py-6 rounded-2xl font-bold text-xl hover:bg-gold-400 hover:scale-105 transition-all shadow-xl shadow-gold-500/20">
-                  Register Now — ₦5,000
+                  Register Now
                 </Link>
                 <Link href="#about" className="border-2 border-white/30 text-white px-10 py-6 rounded-2xl font-bold text-xl hover:bg-white/10 transition-all">
                   Learn More
@@ -436,8 +482,8 @@ export default function LandingPage() {
           </div>
 
           <div className="flex gap-10">
-            <Link href="/admin" className="text-xs font-bold uppercase tracking-widest text-forest-400 hover:text-gold-600 transition-colors">
-              Admin Portal
+            <Link href="https://build-with-ugob.com.ng/" className="text-xs font-bold uppercase tracking-widest text-forest-400 hover:text-gold-600 transition-colors">
+              Powered By UGO.B
             </Link>
             <span className="text-xs font-bold uppercase tracking-widest text-forest-300">
               © 2026 LAWSAN SE Zone

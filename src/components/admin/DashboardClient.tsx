@@ -1,7 +1,9 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Users, CreditCard, ArrowUpRight, GraduationCap, Briefcase, CheckCircle2, Clock } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { Users, CreditCard, ArrowUpRight, GraduationCap, Briefcase, CheckCircle2, Clock, RefreshCw, TrendingUp } from "lucide-react";
 import Link from "next/link";
 
 interface DashboardClientProps {
@@ -10,16 +12,26 @@ interface DashboardClientProps {
     paid: number;
     pending: number;
     revenue: number;
+    netRevenue: number;
   };
   recentRegistrations: any[];
 }
 
 export default function AdminDashboardClient({ stats, recentRegistrations }: DashboardClientProps) {
+  const router = useRouter();
+  const [isRefreshing, setIsRefreshing] = useState(false);
+
+  const handleRefresh = async () => {
+    setIsRefreshing(true);
+    router.refresh();
+    setTimeout(() => setIsRefreshing(false), 1000);
+  };
+
   const cards = [
-    { label: "Total Delegates", value: stats.total, icon: Users, color: "text-blue-600", bg: "bg-blue-50", change: "+5% vs last week" },
-    { label: "Verified Payments", value: stats.paid, icon: CheckCircle2, color: "text-green-600", bg: "bg-green-50", change: "+12%" },
-    { label: "Pending Verification", value: stats.pending, icon: Clock, color: "text-orange-600", bg: "bg-orange-50", change: "-2%" },
-    { label: "Total Revenue", value: `₦${stats.revenue.toLocaleString()}`, icon: CreditCard, color: "text-gold-600", bg: "bg-gold-50", change: "+18%" },
+    { label: "Total Delegates", value: stats.total, icon: Users, color: "text-blue-600", bg: "bg-blue-50", subtitle: "Confirmed payments only" },
+    { label: "Pending Reg.", value: stats.pending, icon: Clock, color: "text-orange-600", bg: "bg-orange-50", subtitle: "Awaiting confirmation" },
+    { label: "Gross Revenue", value: `₦${stats.revenue.toLocaleString()}`, icon: CreditCard, color: "text-emerald-600", bg: "bg-emerald-50", subtitle: "Total transaction value" },
+    { label: "Net Revenue", value: `₦${stats.netRevenue.toLocaleString()}`, icon: TrendingUp, color: "text-gold-600", bg: "bg-gold-50", subtitle: "After Paystack fees (1.5% + ₦100)" },
   ];
 
   return (
@@ -31,11 +43,21 @@ export default function AdminDashboardClient({ stats, recentRegistrations }: Das
         className="bg-forest-900 rounded-[2.5rem] p-8 md:p-12 text-white relative overflow-hidden shadow-2xl shadow-forest-900/20 border border-forest-800"
       >
         <div className="absolute top-0 right-0 w-96 h-96 bg-gold-500/10 rounded-full blur-[100px] -translate-y-1/2 translate-x-1/2" />
-        <div className="relative z-10 max-w-2xl">
-          <h2 className="text-4xl font-heading font-bold mb-4">Good Day, Administrator.</h2>
-          <p className="text-forest-200 text-lg font-light leading-relaxed">
-            The conference portal is currently handling traffic smoothly. You have <span className="text-gold-400 font-bold">{stats.total}</span> total registrations across all categories.
-          </p>
+        <div className="relative z-10 flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+          <div className="max-w-2xl">
+            <h2 className="text-4xl font-heading font-bold mb-4">Good Day, Administrator.</h2>
+            <p className="text-forest-200 text-lg font-light leading-relaxed">
+              The conference portal is currently handling traffic smoothly. You have <span className="text-gold-400 font-bold">{stats.total}</span> confirmed delegates.
+            </p>
+          </div>
+          <button 
+            onClick={handleRefresh}
+            disabled={isRefreshing}
+            className="flex items-center gap-3 bg-white/10 hover:bg-white/20 backdrop-blur-sm border border-white/20 px-6 py-4 rounded-2xl transition-all group active:scale-95"
+          >
+            <RefreshCw className={`w-5 h-5 text-gold-400 ${isRefreshing ? 'animate-spin' : 'group-hover:rotate-180 transition-transform duration-500'}`} />
+            <span className="font-bold text-sm tracking-widest uppercase">Refresh Data</span>
+          </button>
         </div>
       </motion.div>
 
@@ -63,12 +85,53 @@ export default function AdminDashboardClient({ stats, recentRegistrations }: Das
               <div className="relative z-10">
                 <p className="text-forest-500 font-bold text-xs uppercase tracking-widest mb-2">{stat.label}</p>
                 <h3 className="text-3xl font-heading font-bold text-forest-950 mb-2">{stat.value}</h3>
-                <p className="text-[10px] text-forest-400 font-medium">{stat.change}</p>
+                <p className="text-[10px] text-forest-400 font-medium">{stat.subtitle}</p>
               </div>
             </motion.div>
           );
         })}
       </div>
+
+      {/* Revenue Breakdown */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.5 }}
+        className="bg-white border border-forest-100 rounded-[2.5rem] p-8 md:p-10 shadow-sm"
+      >
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-8">
+          <div className="flex-1">
+            <h3 className="text-2xl font-heading font-bold text-forest-950 mb-2">Revenue Insights</h3>
+            <p className="text-forest-500 text-sm max-w-md">Detailed breakdown of transaction processing through Paystack gateway.</p>
+          </div>
+          
+          <div className="flex flex-col md:flex-row gap-6 w-full md:w-auto">
+            <div className="p-6 rounded-2xl bg-forest-50 border border-forest-100 flex-1 md:min-w-[200px]">
+              <p className="text-[10px] font-bold text-forest-400 uppercase tracking-widest mb-1">Processing Fees</p>
+              <p className="text-2xl font-heading font-bold text-red-600">₦{(stats.revenue - stats.netRevenue).toLocaleString()}</p>
+              <div className="mt-4 h-1.5 w-full bg-forest-200 rounded-full overflow-hidden">
+                <div 
+                  className="h-full bg-red-500" 
+                  style={{ width: `${(stats.revenue > 0 ? ((stats.revenue - stats.netRevenue) / stats.revenue) * 100 : 0).toFixed(1)}%` }}
+                />
+              </div>
+            </div>
+            
+            <div className="p-6 rounded-2xl bg-gold-50 border border-gold-100 flex-1 md:min-w-[200px]">
+              <p className="text-[10px] font-bold text-gold-600 uppercase tracking-widest mb-1">Settlement Rate</p>
+              <p className="text-2xl font-heading font-bold text-gold-700">
+                {stats.revenue > 0 ? ((stats.netRevenue / stats.revenue) * 100).toFixed(1) : "100"}%
+              </p>
+              <div className="mt-4 h-1.5 w-full bg-gold-200 rounded-full overflow-hidden">
+                <div 
+                  className="h-full bg-gold-500" 
+                  style={{ width: `${(stats.revenue > 0 ? (stats.netRevenue / stats.revenue) * 100 : 100).toFixed(1)}%` }}
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </motion.div>
 
       {/* Recent Registrations Table */}
       <motion.div

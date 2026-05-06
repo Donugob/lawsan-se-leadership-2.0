@@ -1,19 +1,33 @@
 import { Search, Filter, Download, UserPlus, MoreHorizontal } from "lucide-react";
+import Link from "next/link";
 import prisma from "@/lib/prisma";
 import { Delegate } from "@prisma/client";
 
 // Explicitly type the return as Promise<Delegate[]>
-async function getDelegates(search?: string): Promise<Delegate[]> {
+async function getDelegates(search?: string, status?: string): Promise<Delegate[]> {
   try {
+    const where: any = {};
+    
+    if (search) {
+      where.OR = [
+        { firstName: { contains: search, mode: 'insensitive' } },
+        { lastName: { contains: search, mode: 'insensitive' } },
+        { email: { contains: search, mode: 'insensitive' } },
+        { regId: { contains: search, mode: 'insensitive' } },
+      ];
+    }
+
+    // Default to 'paid' if status is not explicitly set to 'all' or 'pending'
+    if (status === 'pending') {
+      where.status = 'pending';
+    } else if (status === 'all') {
+      // Show all
+    } else {
+      where.status = 'paid';
+    }
+
     const delegates = await prisma.delegate.findMany({
-      where: search ? {
-        OR: [
-          { firstName: { contains: search, mode: 'insensitive' } },
-          { lastName: { contains: search, mode: 'insensitive' } },
-          { email: { contains: search, mode: 'insensitive' } },
-          { regId: { contains: search, mode: 'insensitive' } },
-        ]
-      } : {},
+      where,
       orderBy: { createdAt: "desc" }
     });
     return delegates;
@@ -29,14 +43,21 @@ export default async function DelegatesPage({
 }) {
   const params = await searchParams;
   const query = typeof params.q === 'string' ? params.q : undefined;
-  const delegates = await getDelegates(query);
+  const status = typeof params.status === 'string' ? params.status : 'paid';
+  const delegates = await getDelegates(query, status);
 
   return (
     <div className="space-y-6">
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
         <div>
-          <h1 className="text-2xl font-heading font-bold text-forest-950">Conference Delegates</h1>
-          <p className="text-forest-500 text-sm">Manage and track all {delegates.length} registered participants.</p>
+          <h1 className="text-2xl font-heading font-bold text-forest-950">
+            {status === 'pending' ? 'Pending Registrations' : 'Conference Delegates'}
+          </h1>
+          <p className="text-forest-500 text-sm">
+            {status === 'pending' 
+              ? `There are ${delegates.length} registrations awaiting payment confirmation.`
+              : `Manage and track all ${delegates.length} verified participants.`}
+          </p>
         </div>
         <div className="flex gap-3 w-full md:w-auto">
           <button className="flex-1 md:flex-none flex items-center justify-center gap-2 bg-white border border-forest-200 px-4 py-2.5 rounded-xl text-forest-700 font-medium hover:bg-forest-50 transition-colors shadow-sm">
@@ -47,22 +68,44 @@ export default async function DelegatesPage({
       </div>
 
       {/* Filters Bar */}
-      <div className="bg-white p-4 rounded-2xl border border-forest-100 shadow-sm flex flex-col md:flex-row gap-4">
-        <form className="flex-1 relative">
-          <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-forest-400" />
-          <input 
-            name="q"
-            defaultValue={query}
-            placeholder="Search by name, email or Reg ID..." 
-            className="w-full pl-10 pr-4 py-2.5 bg-forest-50 border border-forest-100 rounded-xl focus:outline-none focus:ring-2 focus:ring-gold-500 focus:border-transparent transition-all"
-          />
-        </form>
-        <div className="flex gap-2">
-          <button className="flex items-center gap-2 bg-white border border-forest-200 px-4 py-2.5 rounded-xl text-forest-700 font-medium hover:bg-forest-50 transition-colors">
-            <Filter className="w-4 h-4" />
-            Filter
+      <div className="bg-white p-4 rounded-2xl border border-forest-100 shadow-sm">
+        <form className="flex flex-col md:flex-row gap-4">
+          <div className="flex-1 relative">
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-forest-400" />
+            <input 
+              name="q"
+              defaultValue={query}
+              placeholder="Search by name, email or Reg ID..." 
+              className="w-full pl-10 pr-4 py-2.5 bg-forest-50 border border-forest-100 rounded-xl focus:outline-none focus:ring-2 focus:ring-gold-500 focus:border-transparent transition-all"
+            />
+          </div>
+          <div className="flex bg-forest-50 p-1.5 rounded-2xl border border-forest-100">
+            {[
+              { id: 'paid', label: 'Verified', count: delegates.filter(d => d.status === 'paid').length },
+              { id: 'pending', label: 'Pending', count: delegates.filter(d => d.status === 'pending').length },
+              { id: 'all', label: 'All', count: delegates.length },
+            ].map((t) => {
+              const isActive = status === t.id;
+              return (
+                <Link
+                  key={t.id}
+                  href={`/admin/delegates?status=${t.id}${query ? `&q=${query}` : ''}`}
+                  className={`px-6 py-2.5 rounded-xl text-sm font-bold transition-all ${
+                    isActive 
+                      ? 'bg-white text-forest-900 shadow-sm border border-forest-100' 
+                      : 'text-forest-400 hover:text-forest-600'
+                  }`}
+                >
+                  {t.label}
+                </Link>
+              );
+            })}
+          </div>
+          <div className="flex-1" />
+          <button type="submit" className="bg-forest-900 text-white px-8 py-3 rounded-xl font-bold hover:bg-forest-800 transition-all shadow-lg shadow-forest-900/10 active:scale-95">
+            Refresh List
           </button>
-        </div>
+        </form>
       </div>
 
       {/* Table */}

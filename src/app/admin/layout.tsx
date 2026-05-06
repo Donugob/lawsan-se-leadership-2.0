@@ -67,7 +67,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       {/* Main Content Area */}
       <main className="flex-1 flex flex-col h-screen overflow-hidden relative">
         {/* Top Header (Desktop & Mobile) */}
-        <header className="h-20 bg-white/80 backdrop-blur-md border-b border-forest-100 flex items-center justify-between px-6 lg:px-10 shrink-0 z-10">
+        <header className="h-20 bg-white border-b border-forest-100 flex items-center justify-between px-6 lg:px-10 shrink-0 z-10">
           <div className="md:hidden flex items-center gap-2">
             <div className="w-8 h-8 bg-forest-900 rounded flex items-center justify-center">
               <span className="text-gold-400 font-heading font-bold text-sm">L</span>
