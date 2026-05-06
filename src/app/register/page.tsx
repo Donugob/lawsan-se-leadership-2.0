@@ -14,15 +14,15 @@ const formSchema = z.object({
   lastName: z.string().min(2, "Last name is required"),
   email: z.string().email("Invalid email address"),
   phone: z.string().min(10, "Phone number is required"),
-  
+
   isStudent: z.boolean(),
   isLawStudent: z.boolean().optional(),
   isSouthEast: z.boolean().optional(),
-  
+
   // Student fields
   university: z.string().optional(),
   level: z.string().optional(),
-  
+
   // Professional fields
   profession: z.string().optional(),
   organization: z.string().optional(),
@@ -76,7 +76,7 @@ export default function RegisterPage() {
     if (step === 2) {
       fieldsToValidate = isStudent ? ["university", "level", "isLawStudent", "isSouthEast"] : ["profession", "organization"];
     }
-    
+
     const isStepValid = await trigger(fieldsToValidate as any);
     if (isStepValid) setStep((prev) => prev + 1);
   };
@@ -85,7 +85,7 @@ export default function RegisterPage() {
 
   const onSubmit = async (data: FormData) => {
     setIsSubmitting(true);
-    
+
     try {
       // 1. Save registration intent to our backend
       const regResponse = await fetch("/api/register", {
@@ -100,7 +100,7 @@ export default function RegisterPage() {
 
       // 2. Initialize Paystack Inline Checkout
       const handler = (window as any).PaystackPop.setup({
-        key: 'pk_test_df6860408346c1518707073e55a8ce63c7315a79', // Provided Test Key
+        key: 'process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY', // Provided Test Key
         email: data.email,
         amount: 5000 * 100, // Paystack uses kobo
         currency: 'NGN',
@@ -124,12 +124,12 @@ export default function RegisterPage() {
             }
           ]
         },
-        callback: function(response: any) {
+        callback: function (response: any) {
           // Success
           setIsSubmitting(false);
           router.push("/success");
         },
-        onClose: function() {
+        onClose: function () {
           setIsSubmitting(false);
         },
       });
@@ -150,7 +150,7 @@ export default function RegisterPage() {
     <main className="min-h-screen bg-forest-900 flex flex-col items-center justify-center p-6 relative overflow-hidden">
       {/* Background aesthetics */}
       <div className="absolute inset-0 z-0 opacity-20 pointer-events-none">
-        <div className="absolute top-0 left-0 w-full h-full bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGNpcmNsZSBjeD0iMSIgY3k9IjEiIHI9IjEiIGZpbGw9InJnYmEoMjEyLCAxNzUsIDU1LCAwLjE1KSIvPjwvc3ZnPg==')]"/>
+        <div className="absolute top-0 left-0 w-full h-full bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGNpcmNsZSBjeD0iMSIgY3k9IjEiIHI9IjEiIGZpbGw9InJnYmEoMjEyLCAxNzUsIDU1LCAwLjE1KSIvPjwvc3ZnPg==')]" />
         <div className="absolute -top-40 -right-40 w-96 h-96 bg-gold-600 rounded-full blur-[120px] mix-blend-screen" />
         <div className="absolute -bottom-40 -left-40 w-[500px] h-[500px] bg-forest-500 rounded-full blur-[150px] mix-blend-screen" />
       </div>
@@ -165,7 +165,7 @@ export default function RegisterPage() {
           <div className="bg-forest-950 p-8 text-center relative border-b border-forest-800">
             <h1 className="text-3xl md:text-4xl font-heading font-bold text-gold-400 mb-2">Register Now</h1>
             <p className="text-forest-200">Secure your seat for Leadership Conference 2.0</p>
-            
+
             {/* Progress Bar */}
             <div className="flex justify-center items-center gap-4 mt-8">
               {[1, 2, 3].map((item) => (
@@ -193,7 +193,7 @@ export default function RegisterPage() {
                       </div>
                       <h2 className="text-xl font-bold text-forest-900">Personal Information</h2>
                     </div>
-                    
+
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                       <div>
                         <label className="block text-sm font-semibold text-forest-900 mb-2">First Name</label>
@@ -240,7 +240,7 @@ export default function RegisterPage() {
 
                     {/* Dynamic Toggles */}
                     <div className="bg-white p-2 rounded-2xl border border-forest-100 flex shadow-sm mb-6">
-                      <button 
+                      <button
                         type="button"
                         onClick={() => setValue("isStudent", true)}
                         className={`flex-1 py-3 px-4 rounded-xl font-semibold flex items-center justify-center gap-2 transition-all ${isStudent ? 'bg-forest-900 text-white shadow-md' : 'text-forest-600 hover:bg-forest-50'}`}
@@ -248,7 +248,7 @@ export default function RegisterPage() {
                         <GraduationCap className="w-4 h-4" />
                         Student
                       </button>
-                      <button 
+                      <button
                         type="button"
                         onClick={() => setValue("isStudent", false)}
                         className={`flex-1 py-3 px-4 rounded-xl font-semibold flex items-center justify-center gap-2 transition-all ${!isStudent ? 'bg-forest-900 text-white shadow-md' : 'text-forest-600 hover:bg-forest-50'}`}
@@ -330,7 +330,7 @@ export default function RegisterPage() {
                     <div>
                       <h2 className="text-2xl font-heading font-bold text-forest-900 mb-2">Complete Registration</h2>
                       <p className="text-forest-600 mb-8 max-w-sm mx-auto">Click below to securely complete your payment via Paystack.</p>
-                      
+
                       <div className="bg-white p-6 rounded-2xl text-left border border-forest-200 mb-8 shadow-sm">
                         <div className="flex justify-between items-center py-3 border-b border-forest-100">
                           <span className="text-forest-600 font-medium">Ticket Type</span>
@@ -364,7 +364,7 @@ export default function RegisterPage() {
                         )}
                       </button>
                     </div>
-                    
+
                     <div className="flex items-center justify-center gap-2 mt-6 text-xs text-forest-500 font-medium">
                       <ShieldCheck className="w-4 h-4 text-green-600" />
                       <span>Secured by <span className="font-bold">Paystack</span></span>
