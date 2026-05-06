@@ -100,7 +100,7 @@ export default function RegisterPage() {
 
       // 2. Initialize Paystack Inline Checkout
       const handler = (window as any).PaystackPop.setup({
-        key: 'process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY', // Provided Test Key
+        key: process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY, // Use environment variable
         email: data.email,
         amount: 5000 * 100, // Paystack uses kobo
         currency: 'NGN',
