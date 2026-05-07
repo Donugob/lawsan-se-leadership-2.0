@@ -133,38 +133,29 @@ export default async function DelegatesPage({
         </form>
       </div>
 
-      {/* Table */}
+      {/* Table Section */}
       <div className="bg-white border border-forest-100 rounded-[2rem] shadow-sm overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse">
             <thead>
               <tr className="bg-forest-50/50 border-b border-forest-100 text-forest-500 text-xs uppercase tracking-wider">
-                <th className="p-6 font-semibold">Reg ID</th>
-                <th className="p-6 font-semibold">Name & Contact</th>
+                <th className="p-6 font-semibold">Delegate</th>
+                <th className="p-6 font-semibold">Category</th>
                 <th className="p-6 font-semibold">Affiliation</th>
-                <th className="p-6 font-semibold">Zone Status</th>
-                <th className="p-6 font-semibold">Payment</th>
-                <th className="p-6 font-semibold"></th>
+                <th className="p-6 font-semibold">Reg ID</th>
+                <th className="p-6 font-semibold text-right">Actions</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-forest-50">
               {delegates.length === 0 ? (
                 <tr>
-                  <td colSpan={6} className="p-20 text-center text-forest-400">
-                    <div className="flex flex-col items-center gap-4">
-                      <Search className="w-12 h-12 opacity-20" />
-                      <p>No delegates found in the system yet.</p>
-                    </div>
+                  <td colSpan={5} className="p-20 text-center text-forest-400">
+                    No delegates found matching the criteria.
                   </td>
                 </tr>
               ) : (
                 delegates.map((delegate) => (
-                  <tr key={delegate.id} className="hover:bg-forest-50/30 transition-colors group">
-                    <td className="p-6">
-                      <span className="font-mono text-xs font-bold text-forest-900 bg-forest-50 px-3 py-1.5 rounded-lg border border-forest-100 group-hover:border-gold-300 transition-all">
-                        {delegate.regId || "N/A"}
-                      </span>
-                    </td>
+                  <tr key={delegate.id} className="hover:bg-forest-50/30 transition-colors">
                     <td className="p-6">
                       <div className="flex flex-col">
                         <span className="font-bold text-forest-900">{delegate.firstName} {delegate.lastName}</span>
@@ -172,28 +163,24 @@ export default async function DelegatesPage({
                       </div>
                     </td>
                     <td className="p-6">
-                      <div className="flex flex-col">
-                        <span className="text-sm font-medium text-forest-800">{delegate.university || delegate.organization}</span>
-                        <span className="text-xs text-forest-500">{delegate.level || delegate.profession}</span>
-                      </div>
-                    </td>
-                    <td className="p-6">
                       <span className={`px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest ${
-                        delegate.isSouthEast ? 'bg-gold-50 text-gold-700 border border-gold-200' : 'bg-forest-50 text-forest-600 border border-forest-100'
+                        delegate.isStudent ? 'bg-blue-50 text-blue-700 border border-blue-100' : 'bg-purple-50 text-purple-700 border border-purple-100'
                       }`}>
-                        {delegate.isSouthEast ? 'South East' : 'Out of Zone'}
+                        {delegate.isStudent ? 'Student' : 'Professional'}
                       </span>
                     </td>
                     <td className="p-6">
-                      <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold ${
-                        delegate.status === 'paid' ? 'bg-green-50 text-green-700 border border-green-200' : 'bg-orange-50 text-orange-700 border border-orange-200'
-                      }`}>
-                        <div className={`w-1.5 h-1.5 rounded-full ${delegate.status === 'paid' ? 'bg-green-500' : 'bg-orange-500'}`} />
-                        {delegate.status}
+                      <span className="text-sm text-forest-600 font-medium">
+                        {delegate.isStudent ? delegate.university : delegate.profession}
+                      </span>
+                    </td>
+                    <td className="p-6">
+                      <span className="font-mono text-xs font-bold text-forest-900 bg-forest-50 px-3 py-1.5 rounded-lg border border-forest-100">
+                        #{delegate.regId}
                       </span>
                     </td>
                     <td className="p-6 text-right">
-                      <button className="text-forest-400 hover:text-forest-900 transition-colors">
+                      <button className="text-forest-400 hover:text-forest-900 transition-colors p-2 rounded-lg hover:bg-forest-50">
                         <MoreHorizontal className="w-5 h-5" />
                       </button>
                     </td>
