@@ -127,7 +127,7 @@ export default function RegisterPage() {
       const handler = PaystackPop.setup({
         key: process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY,
         email: data.email,
-        amount: 300000, // Amount in kobo (3,000 Naira)
+        amount: 315000, // Amount in kobo (3,150 Naira)
         currency: 'NGN',
         ref: result.regId + "_" + Date.now(),
         metadata: {
@@ -392,9 +392,17 @@ export default function RegisterPage() {
                           <span className="text-forest-600 font-medium text-sm">Ticket Type</span>
                           <span className="font-bold text-forest-900 text-sm">Conference Delegate Ticket</span>
                         </div>
+                        <div className="flex justify-between items-center py-3 border-b border-forest-100">
+                          <span className="text-forest-600 font-medium text-sm">Base Registration</span>
+                          <span className="font-bold text-forest-900 text-sm">₦3,000</span>
+                        </div>
+                        <div className="flex justify-between items-center py-3 border-b border-forest-100">
+                          <span className="text-forest-600 font-medium text-sm">Processing Fee</span>
+                          <span className="font-bold text-forest-900 text-sm">₦150</span>
+                        </div>
                         <div className="flex justify-between items-center py-3 pt-4">
-                          <span className="text-forest-600 font-medium text-sm">Total Amount</span>
-                          <span className="font-heading font-extrabold text-2xl text-forest-900">₦3,000</span>
+                          <span className="text-forest-900 font-bold text-sm">Total Amount</span>
+                          <span className="font-heading font-extrabold text-2xl text-forest-900">₦3,150</span>
                         </div>
                       </div>
                     </div>

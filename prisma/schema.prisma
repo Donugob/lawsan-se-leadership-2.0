@@ -27,7 +27,7 @@ model Delegate {
   organization  String?
   
   // Payment info
-  amount        Int      @default(3000)
+  amount        Int      @default(3150)
   status        String   @default("pending") // pending, paid, failed
   paystackRef   String?  @unique
   

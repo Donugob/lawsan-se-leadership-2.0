@@ -428,7 +428,7 @@ export default function LandingPage() {
           <div className="space-y-6">
             {[
               { q: "Who can attend the conference?", a: "The conference is open to all Law Students, Legal Professionals, and anyone interested in the intersection of law and technology." },
-              { q: "What does the registration fee cover?", a: "Your ₦3,000 fee covers the conference pass, official delegate materials, and access to all sessions." },
+              { q: "What does the registration fee cover?", a: "Your ₦3,000 fee (plus ₦150 processing fee) covers the conference pass, official delegate materials, and access to all sessions." },
               { q: "Will certificates be provided?", a: "Yes, all verified attendees will receive a Certificate of Participation signed by the Council of Chapter Presidents." },
             ].map((faq, i) => (
               <motion.div

@@ -30,7 +30,7 @@ export default function EventSchema() {
     "offers": {
       "@type": "Offer",
       "url": "https://lawsan-leadership.vercel.app/register",
-      "price": "3000",
+      "price": "3150",
       "priceCurrency": "NGN",
       "availability": "https://schema.org/InStock",
       "validFrom": "2026-01-01"
