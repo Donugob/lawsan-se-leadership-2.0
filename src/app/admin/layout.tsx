@@ -2,13 +2,11 @@
 
 import { usePathname } from "next/navigation";
 import Link from "next/link";
-import { 
-  LayoutDashboard, 
-  Users, 
-  CreditCard, 
-  Award, 
-  Calendar, 
-  Settings, 
+import {
+  LayoutDashboard,
+  Users,
+  CreditCard,
+  Settings,
   ChevronRight,
   LogOut,
   Bell
@@ -18,8 +16,6 @@ const navigation = [
   { name: "Overview", href: "/admin", icon: LayoutDashboard },
   { name: "Delegates", href: "/admin/delegates", icon: Users },
   { name: "Transactions", href: "/admin/transactions", icon: CreditCard },
-  { name: "Awards", href: "/admin/awards", icon: Award },
-  { name: "Events", href: "/admin/events", icon: Calendar },
   { name: "Settings", href: "/admin/settings", icon: Settings },
 ];
 
@@ -48,11 +44,10 @@ export default function AdminLayout({
               <Link
                 key={item.name}
                 href={item.href}
-                className={`flex items-center gap-4 px-4 py-3.5 rounded-2xl text-sm font-bold transition-all group ${
-                  isActive 
-                    ? "bg-gold-500 text-forest-950 shadow-lg shadow-gold-500/10" 
+                className={`flex items-center gap-4 px-4 py-3.5 rounded-2xl text-sm font-bold transition-all group ${isActive
+                    ? "bg-gold-500 text-forest-950 shadow-lg shadow-gold-500/10"
                     : "text-forest-300 hover:text-white hover:bg-forest-900"
-                }`}
+                  }`}
               >
                 <item.icon className={`w-5 h-5 transition-colors ${isActive ? "text-forest-950" : "text-forest-500 group-hover:text-forest-300"}`} />
                 {item.name}
