@@ -5,7 +5,7 @@ import { headers } from "next/headers";
 export async function logAdminAction(action: string, details?: any, systemContext?: { adminId?: string, adminName: string }) {
   try {
     let adminId = systemContext?.adminId;
-    let adminName = systemContext?.adminName;
+    let adminName: string = systemContext?.adminName || "";
 
     if (!adminName) {
       const session = await getSession();
