@@ -18,8 +18,8 @@ export async function logAdminAction(action: string, details?: any, systemContex
 
     await prisma.auditLog.create({
       data: {
-        adminId: session.admin.id,
-        adminName: session.admin.name,
+        adminId,
+        adminName,
         action,
         details: details || {},
         ip,
