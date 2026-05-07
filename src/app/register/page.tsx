@@ -15,7 +15,7 @@ const registrationSchema = z.object({
   phone: z.string().min(10, "Phone number is required"),
   university: z.string().optional(),
   profession: z.string().optional(),
-  isStudent: z.boolean().default(true),
+  isStudent: z.boolean(),
 });
 
 type RegistrationData = z.infer<typeof registrationSchema>;
