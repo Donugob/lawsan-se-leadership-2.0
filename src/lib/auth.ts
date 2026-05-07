@@ -9,6 +9,7 @@ if (!secretKey) {
 }
 const key = new TextEncoder().encode(secretKey);
 
+export async function encrypt(payload: any) {
   return await new SignJWT(payload)
     .setProtectedHeader({ alg: "HS256" })
     .setIssuedAt()
@@ -65,7 +66,7 @@ export async function updateSession(request: NextRequest) {
   if (!session) return;
 
   const parsed = await decrypt(session);
-  parsed.expires = new Date(Date.now() + 24 * 60 * 60 * 1000);
+  parsed.expires = new Date(Date.now() + 8 * 60 * 60 * 1000);
   const res = NextResponse.next();
   res.cookies.set({
     name: "session",
