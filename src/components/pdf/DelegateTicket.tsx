@@ -157,9 +157,9 @@ export const DelegateTicket = ({ delegate }: TicketProps) => (
       <View style={styles.outerBorder}>
         <View style={styles.innerContainer}>
           <Text style={styles.watermark}>LAWSAN SE</Text>
-          
+
           <View style={styles.header}>
-            <Text style={styles.headerTop}>OFFICIAL ADMISSION</Text>
+            <Text style={styles.headerTop}>OFFICIAL PASS</Text>
             <Text style={styles.title}>Leadership Conference 2.0</Text>
             <Text style={styles.tagline}>Emerging Lawyers, Emerging Realities</Text>
           </View>

@@ -1,6 +1,38 @@
-import { Settings, User, Bell, Shield, Database, HelpCircle } from "lucide-react";
+"use client";
+
+import { useState, useEffect } from "react";
+import { Settings as SettingsIcon, User, Shield, Database, HelpCircle, Loader2 } from "lucide-react";
+import toast from "react-hot-toast";
 
 export default function SettingsPage() {
+  const [user, setUser] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchSession = async () => {
+      try {
+        const res = await fetch("/api/admin/auth/session");
+        if (res.ok) {
+          const data = await res.json();
+          setUser(data.user);
+        }
+      } catch (err) {
+        console.error("Session fetch failed");
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchSession();
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center py-20">
+        <Loader2 className="w-8 h-8 animate-spin text-gold-500" />
+      </div>
+    );
+  }
+
   const sections = [
     {
       id: "profile",
@@ -8,8 +40,8 @@ export default function SettingsPage() {
       description: "Manage your account details and login credentials.",
       icon: User,
       fields: [
-        { label: "Display Name", value: "Council Administrator" },
-        { label: "Email Address", value: "admin@lawsanse.org" },
+        { label: "Display Name", value: user?.name || "N/A" },
+        { label: "Email Address", value: user?.email || "N/A" },
       ]
     },
     {
@@ -19,24 +51,28 @@ export default function SettingsPage() {
       icon: Database,
       fields: [
         { label: "Event Name", value: "Lawsan SE Leadership Conference 2.0" },
-        { label: "Registration Fee", value: "₦5,000" },
+        { label: "Registration Fee", value: "₦5,000 / ₦10,000" },
         { label: "Venue", value: "Godfrey Okoye University, Enugu" },
       ]
     },
-    {
+  ];
+
+  // Only show security for super admins
+  if (user?.role === "SUPER_ADMIN") {
+    sections.push({
       id: "security",
       title: "Security & API",
       description: "Manage your integration keys and webhook status.",
       icon: Shield,
       fields: [
-        { label: "Paystack Mode", value: "Test Mode" },
-        { label: "Webhook URL", value: "https://lawsan-se.org/api/webhook/paystack" },
+        { label: "Paystack Mode", value: "Live Mode" },
+        { label: "Webhook URL", value: "https://lawsanse.org/api/webhook/paystack" },
       ]
-    }
-  ];
+    });
+  }
 
   return (
-    <div className="max-w-4xl space-y-8">
+    <div className="max-w-4xl space-y-8 animate-in fade-in duration-700">
       <div>
         <h1 className="text-2xl font-heading font-bold text-forest-950">System Settings</h1>
         <p className="text-forest-500 text-sm">Configure and manage the Lawsan SE portal behavior.</p>
@@ -68,7 +104,10 @@ export default function SettingsPage() {
                     </div>
                   ))}
                   <div className="pt-4 flex justify-end">
-                    <button className="text-gold-600 font-bold text-sm hover:text-gold-700 transition-colors">
+                    <button 
+                      onClick={() => toast.error("System configuration is managed by Super Admin.")}
+                      className="text-gold-600 font-bold text-sm hover:text-gold-700 transition-colors"
+                    >
                       Edit Section
                     </button>
                   </div>
@@ -79,7 +118,6 @@ export default function SettingsPage() {
         })}
       </div>
 
-      {/* Support Footer */}
       <div className="p-8 bg-gold-50 border border-gold-100 rounded-[2rem] flex items-center gap-6">
         <div className="w-12 h-12 bg-gold-500 text-white rounded-2xl flex items-center justify-center flex-shrink-0">
           <HelpCircle className="w-6 h-6" />
