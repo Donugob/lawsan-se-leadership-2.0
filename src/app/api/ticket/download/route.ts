@@ -23,7 +23,7 @@ export async function GET(req: Request) {
 
     const pdfBuffer = await renderToBuffer(React.createElement(DelegateTicket, { delegate: delegate as any }) as any);
 
-    return new Response(pdfBuffer, {
+    return new Response(pdfBuffer as any, {
       headers: {
         "Content-Type": "application/pdf",
         "Content-Disposition": `attachment; filename="Ticket-${regId}.pdf"`,
