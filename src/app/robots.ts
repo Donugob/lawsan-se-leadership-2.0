@@ -7,6 +7,6 @@ export default function robots(): MetadataRoute.Robots {
       allow: '/',
       disallow: ['/admin/', '/api/admin/'],
     },
-    sitemap: 'https://lawsan-leadership.vercel.app/sitemap.xml',
+    sitemap: 'https://llc.lawsan-se.com.ng/sitemap.xml',
   };
 }

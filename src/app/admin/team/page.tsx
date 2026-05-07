@@ -168,7 +168,7 @@ export default function TeamPage() {
                   required
                   value={inviteData.name}
                   onChange={(e) => setInviteData({...inviteData, name: e.target.value})}
-                  placeholder="John Doe"
+                  placeholder="Chidi Okoro"
                   className="w-full bg-forest-50/50 border border-forest-50 rounded-2xl py-4 px-5 text-forest-900 placeholder:text-forest-300 focus:outline-none focus:ring-2 focus:ring-gold-500/20 transition-all"
                 />
               </div>
@@ -182,7 +182,7 @@ export default function TeamPage() {
                     required
                     value={inviteData.email}
                     onChange={(e) => setInviteData({...inviteData, email: e.target.value})}
-                    placeholder="colleague@lawsanse.org"
+                    placeholder="colleague@lawsan-se.com.ng"
                     className="w-full bg-forest-50/50 border border-forest-50 rounded-2xl py-4 pl-12 pr-5 text-forest-900 placeholder:text-forest-300 focus:outline-none focus:ring-2 focus:ring-gold-500/20 transition-all"
                   />
                 </div>

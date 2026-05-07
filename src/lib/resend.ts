@@ -9,7 +9,7 @@ export async function sendTicketEmail({ email, firstName, regId, pdfBuffer }: {
   pdfBuffer: Buffer
 }) {
   try {
-    const fromDomain = process.env.RESEND_FROM_DOMAIN || 'lawsanse.org';
+    const fromDomain = process.env.RESEND_FROM_DOMAIN || 'lawsan-se.com.ng';
     const { data, error } = await resend.emails.send({
       from: `Leadership Conference <no-reply@${fromDomain}>`,
       to: [email],
@@ -117,7 +117,7 @@ export async function sendAdminInvitationEmail({ email, name, setupUrl }: {
   setupUrl: string
 }) {
   try {
-    const fromDomain = process.env.RESEND_FROM_DOMAIN || 'lawsanse.org';
+    const fromDomain = process.env.RESEND_FROM_DOMAIN || 'lawsan-se.com.ng';
     const { data, error } = await resend.emails.send({
       from: `Leadership Security <no-reply@${fromDomain}>`,
       to: [email],

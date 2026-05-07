@@ -503,7 +503,7 @@ export default function LandingPage() {
                 <h4 className="text-[10px] uppercase tracking-widest font-bold text-forest-900">Contact</h4>
                 <div className="flex flex-col gap-4">
                   <span className="text-sm text-forest-500">Enugu, Nigeria</span>
-                  <span className="text-sm text-forest-500">info@lawsanse.org</span>
+                  <span className="text-sm text-forest-500">info@lawsan-se.com.ng</span>
                 </div>
               </div>
             </div>
@@ -517,10 +517,10 @@ export default function LandingPage() {
             </div>
 
             <div className="flex items-center gap-2 group">
-              <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-forest-300">Crafted with precision by</span>
-              <Link 
-                href="https://build-with-ugob.com.ng/" 
-                target="_blank" 
+              <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-forest-300">Powered By</span>
+              <Link
+                href="https://build-with-ugob.com.ng/"
+                target="_blank"
                 rel="noopener noreferrer"
                 className="bg-[#06160b] text-white px-4 py-2 rounded-xl text-[10px] font-bold uppercase tracking-widest hover:bg-gold-500 hover:text-[#06160b] transition-all shadow-xl shadow-forest-900/10 flex items-center gap-2"
               >

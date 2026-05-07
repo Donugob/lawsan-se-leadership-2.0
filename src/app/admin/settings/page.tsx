@@ -66,7 +66,7 @@ export default function SettingsPage() {
       icon: Shield,
       fields: [
         { label: "Paystack Mode", value: "Live Mode" },
-        { label: "Webhook URL", value: "https://lawsanse.org/api/webhook/paystack" },
+        { label: "Webhook URL", value: "https://llc.lawsan-se.com.ng/api/webhook/paystack" },
       ]
     });
   }

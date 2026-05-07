@@ -25,11 +25,11 @@ export default function EventSchema() {
     "organizer": {
       "@type": "Organization",
       "name": "Lawsan South East",
-      "url": "https://lawsan-leadership.vercel.app"
+      "url": "https://llc.lawsan-se.com.ng"
     },
     "offers": {
       "@type": "Offer",
-      "url": "https://lawsan-leadership.vercel.app/register",
+      "url": "https://llc.lawsan-se.com.ng/register",
       "price": "3150",
       "priceCurrency": "NGN",
       "availability": "https://schema.org/InStock",

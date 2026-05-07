@@ -277,7 +277,7 @@ export default function RegisterPage() {
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-5">
                       <div>
                         <label className="block text-xs font-bold text-forest-900 uppercase tracking-widest mb-2">First Name</label>
-                        <input {...register("firstName")} className="w-full px-4 py-3.5 rounded-2xl bg-white border border-forest-200 focus:outline-none focus:ring-2 focus:ring-gold-500 transition-all shadow-sm" placeholder="John" />
+                        <input {...register("firstName")} className="w-full px-4 py-3.5 rounded-2xl bg-white border border-forest-200 focus:outline-none focus:ring-2 focus:ring-gold-500 transition-all shadow-sm" placeholder="Ebuka" />
                         {errors.firstName && <p className="text-red-500 text-xs mt-1.5 font-medium">{errors.firstName.message}</p>}
                       </div>
                       <div>
@@ -289,7 +289,7 @@ export default function RegisterPage() {
 
                     <div>
                       <label className="block text-xs font-bold text-forest-900 uppercase tracking-widest mb-2">Email Address</label>
-                      <input {...register("email")} type="email" className="w-full px-4 py-3.5 rounded-2xl bg-white border border-forest-200 focus:outline-none focus:ring-2 focus:ring-gold-500 transition-all shadow-sm" placeholder="john@example.com" />
+                      <input {...register("email")} type="email" className="w-full px-4 py-3.5 rounded-2xl bg-white border border-forest-200 focus:outline-none focus:ring-2 focus:ring-gold-500 transition-all shadow-sm" placeholder="delegate@lawsan-se.com.ng" />
                       {errors.email && <p className="text-red-500 text-xs mt-1.5 font-medium">{errors.email.message}</p>}
                     </div>
 

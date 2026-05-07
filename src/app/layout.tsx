@@ -14,7 +14,7 @@ const outfit = Outfit({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://lawsan-leadership.vercel.app"),
+  metadataBase: new URL("https://llc.lawsan-se.com.ng"),
   title: {
     default: "Lawsan SE Leadership Conference 2.0",
     template: "%s | Lawsan SE 2.0"
@@ -26,7 +26,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "en_NG",
-    url: "https://lawsan-leadership.vercel.app",
+    url: "https://llc.lawsan-se.com.ng",
     title: "Lawsan SE Leadership Conference 2.0 | Excellence in Motion",
     description: "Emerging Lawyers, Emerging Realities. Register now for the premier legal leadership event in Enugu.",
     siteName: "Lawsan SE 2.0",
