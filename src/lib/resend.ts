@@ -123,23 +123,52 @@ export async function sendAdminInvitationEmail({ email, name, setupUrl }: {
       to: [email],
       subject: 'Invite: Join the Admin Panel 🛡️',
       html: `
-        <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; background-color: #081d0f; padding: 60px; border-radius: 40px; color: #ffffff;">
-          <h1 style="color: #d4ba54; font-size: 28px; margin-bottom: 24px;">Admin Invitation</h1>
-          <p style="font-size: 16px; line-height: 1.6; color: #9bcbac; margin-bottom: 32px;">
-            Hello ${name},<br/><br/>
-            You have been invited to join the administration team for the <strong>Lawsan SE Leadership Conference 2.0</strong>.
-          </p>
-          <a href="${setupUrl}" style="display: inline-block; background-color: #d4ba54; color: #081d0f; padding: 18px 36px; border-radius: 16px; text-decoration: none; font-weight: bold; font-size: 16px; box-shadow: 0 10px 20px rgba(212, 186, 84, 0.2);">
-            Complete Your Setup
-          </a>
-          <p style="margin-top: 40px; font-size: 12px; color: #4fa56d;">
-            This link will expire in 7 days. If you were not expecting this invite, please ignore this email.
-          </p>
-          <hr style="border: none; border-top: 1px solid #18582f; margin: 40px 0;" />
-          <p style="font-size: 10px; color: #75b88c; text-align: center;">
-            LAWSAN South East Zone Security Operations
-          </p>
-        </div>
+        <!DOCTYPE html>
+        <html>
+        <head>
+          <style>
+            @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Outfit:wght@400;700&display=swap');
+          </style>
+        </head>
+        <body style="margin: 0; padding: 0; background-color: #06160b; font-family: 'Outfit', sans-serif;">
+          <table width="100%" border="0" cellspacing="0" cellpadding="0">
+            <tr>
+              <td align="center" style="padding: 60px 20px;">
+                <table width="500" border="0" cellspacing="0" cellpadding="0" style="background-color: #081d0f; border-radius: 40px; overflow: hidden; border: 1px solid rgba(255, 255, 255, 0.1); box-shadow: 0 40px 80px rgba(0,0,0,0.5);">
+                  <tr>
+                    <td style="padding: 60px 40px; text-align: center;">
+                      <div style="width: 64px; height: 64px; background-color: #d4ba54; border-radius: 20px; display: inline-block; margin-bottom: 30px;">
+                        <img src="https://lawsanse.org/shield-gold.png" alt="🛡️" style="width: 32px; height: 32px; margin-top: 16px;" />
+                      </div>
+                      <h1 style="color: #d4ba54; font-family: 'Playfair Display', serif; font-size: 28px; margin: 0; margin-bottom: 12px;">Admin Invitation</h1>
+                      <p style="color: #9bcbac; font-size: 16px; line-height: 1.6; margin-bottom: 40px;">
+                        Hello ${name},<br/><br/>
+                        You have been granted administrative access to the <strong>Leadership Conference 2.0</strong> portal.
+                      </p>
+                      
+                      <a href="${setupUrl}" style="display: inline-block; background-color: #d4ba54; color: #081d0f; padding: 20px 40px; border-radius: 20px; text-decoration: none; font-weight: bold; font-size: 16px; margin-bottom: 40px; box-shadow: 0 10px 20px rgba(212, 186, 84, 0.2);">
+                        Secure Your Access
+                      </a>
+                      
+                      <div style="padding: 20px; background-color: rgba(255, 255, 255, 0.03); border-radius: 20px; border: 1px solid rgba(255, 255, 255, 0.05);">
+                        <p style="color: #4fa56d; font-size: 11px; margin: 0; text-transform: uppercase; letter-spacing: 2px;">Security Protocol</p>
+                        <p style="color: #75b88c; font-size: 12px; margin-top: 8px;">
+                          This link will expire in 7 days. Ensure you use a strong, unique password for your administration account.
+                        </p>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td style="padding-bottom: 40px; text-align: center;">
+                      <p style="color: #18582f; font-size: 10px; text-transform: uppercase; letter-spacing: 4px; font-weight: bold;">Lawsan SE Security Operations</p>
+                    </td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+          </table>
+        </body>
+        </html>
       `,
     });
 

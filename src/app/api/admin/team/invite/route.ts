@@ -43,7 +43,10 @@ export async function POST(req: Request) {
     });
 
     // Send email
-    const setupUrl = `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/admin/setup/${token}`;
+    const protocol = req.headers.get("x-forwarded-proto") || "http";
+    const host = req.headers.get("host");
+    const setupUrl = `${protocol}://${host}/admin/setup/${token}`;
+    
     await sendAdminInvitationEmail({ email, name: name || 'Colleague', setupUrl });
 
     return NextResponse.json({ success: true });
