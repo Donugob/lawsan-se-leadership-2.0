@@ -98,6 +98,9 @@ export default function RegisterPage() {
         throw new Error("Failed to initialize registration");
       }
 
+      const regData = await regResponse.json();
+      const regId = regData.regId;
+
       // 2. Initialize Paystack Inline Checkout
       const handler = (window as any).PaystackPop.setup({
         key: process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY, // Use environment variable
@@ -127,7 +130,7 @@ export default function RegisterPage() {
         callback: function (response: any) {
           // Success
           setIsSubmitting(false);
-          router.push("/success");
+          router.push(`/success?regId=${regId}`);
         },
         onClose: function () {
           setIsSubmitting(false);

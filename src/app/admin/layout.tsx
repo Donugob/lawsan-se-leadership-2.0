@@ -99,7 +99,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       </main>
 
       {/* Mobile Bottom Navigation */}
-      <nav className="md:hidden fixed bottom-0 w-full bg-forest-950 border-t border-forest-900 pb-safe z-50">
+      <nav className="md:hidden fixed bottom-0 w-full bg-forest-950 border-t border-forest-900 pb-safe z-50 shadow-[0_-4px_20px_rgba(0,0,0,0.4)]">
         <div className="flex justify-around items-center p-2">
           {navItems.map((item) => {
             const isActive = pathname === item.href;

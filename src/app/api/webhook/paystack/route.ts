@@ -54,7 +54,7 @@ export async function POST(req: Request) {
       const { reference, customer } = data;
       const email = customer.email;
 
-      await prisma.delegate.update({
+      const delegate = await prisma.delegate.update({
         where: { email },
         data: {
           status: "paid",
@@ -63,6 +63,28 @@ export async function POST(req: Request) {
       });
       
       console.log(`✅ Delegate Verified: ${email} marked as PAID.`);
+
+      // 3. Email & PDF: Generate and send ticket
+      try {
+        const { renderToBuffer } = await import('@react-pdf/renderer');
+        const { DelegateTicket } = await import('@/components/pdf/DelegateTicket');
+        const { sendTicketEmail } = await import('@/lib/resend');
+
+        const pdfBuffer = await renderToBuffer(<DelegateTicket delegate={delegate as any} />);
+        
+        await sendTicketEmail({
+          email: delegate.email,
+          firstName: delegate.firstName,
+          regId: delegate.regId || "N/A",
+          pdfBuffer
+        });
+        
+        console.log(`📧 Ticket Email sent to: ${delegate.email}`);
+      } catch (emailError) {
+        console.error("❌ Failed to send ticket email:", emailError);
+        // We don't return error to Paystack so they don't retry unnecessarily 
+        // if the database part was successful
+      }
     }
 
     return NextResponse.json({ received: true });

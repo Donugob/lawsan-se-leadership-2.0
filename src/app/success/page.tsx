@@ -3,8 +3,13 @@
 import { motion } from "framer-motion";
 import { CheckCircle, Download, Calendar, MapPin, Share2, Home } from "lucide-react";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
+import { Suspense } from "react";
 
-export default function SuccessPage() {
+function SuccessContent() {
+  const searchParams = useSearchParams();
+  const regId = searchParams.get("regId") || "LLC-REF-000";
+
   return (
     <main className="min-h-screen bg-cream flex items-center justify-center p-6 relative overflow-hidden">
       {/* Background celebration accents */}
@@ -59,7 +64,7 @@ export default function SuccessPage() {
               </div>
               <div className="text-center md:text-right">
                 <p className="text-xs text-forest-500 uppercase tracking-widest mb-1">Registration ID</p>
-                <p className="text-xl font-heading font-bold text-forest-900">#LAW-26-4829</p>
+                <p className="text-xl font-heading font-bold text-forest-900">#{regId}</p>
               </div>
             </div>
 
@@ -83,10 +88,13 @@ export default function SuccessPage() {
 
             {/* Action Buttons */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-4">
-              <button className="flex items-center justify-center gap-2 bg-forest-900 text-gold-100 py-4 rounded-2xl font-bold hover:bg-forest-800 transition-colors shadow-lg shadow-forest-900/10">
+              <a 
+                href={`/api/ticket/download?regId=${regId}`}
+                className="flex items-center justify-center gap-2 bg-forest-900 text-gold-100 py-4 rounded-2xl font-bold hover:bg-forest-800 transition-colors shadow-lg shadow-forest-900/10"
+              >
                 <Download className="w-5 h-5" />
                 Download Ticket
-              </button>
+              </a>
               <button className="flex items-center justify-center gap-2 border border-forest-200 text-forest-800 py-4 rounded-2xl font-bold hover:bg-forest-50 transition-colors">
                 <Share2 className="w-5 h-5" />
                 Share Attendance
@@ -101,5 +109,13 @@ export default function SuccessPage() {
         </motion.div>
       </div>
     </main>
+  );
+}
+
+export default function SuccessPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-cream flex items-center justify-center">Loading...</div>}>
+      <SuccessContent />
+    </Suspense>
   );
 }
