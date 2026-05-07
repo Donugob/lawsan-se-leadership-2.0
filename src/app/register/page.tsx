@@ -127,10 +127,11 @@ export default function RegisterPage() {
       const handler = PaystackPop.setup({
         key: process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY,
         email: data.email,
-        amount: isStudent ? 500000 : 1000000, // Amount in kobo
+        amount: 300000, // Amount in kobo (3,000 Naira)
         currency: 'NGN',
         ref: result.regId + "_" + Date.now(),
         metadata: {
+          reg_id: result.regId,
           custom_fields: [
             { display_name: "Registration ID", variable_name: "reg_id", value: result.regId },
             { display_name: "Name", variable_name: "name", value: `${data.firstName} ${data.lastName}` },
@@ -389,11 +390,11 @@ export default function RegisterPage() {
                       <div className="bg-white p-6 rounded-2xl text-left border border-forest-200 mb-8 shadow-sm">
                         <div className="flex justify-between items-center py-3 border-b border-forest-100">
                           <span className="text-forest-600 font-medium text-sm">Ticket Type</span>
-                          <span className="font-bold text-forest-900 text-sm">{isStudent ? 'Standard Delegate (Student)' : 'Professional Delegate'}</span>
+                          <span className="font-bold text-forest-900 text-sm">Conference Delegate Ticket</span>
                         </div>
                         <div className="flex justify-between items-center py-3 pt-4">
                           <span className="text-forest-600 font-medium text-sm">Total Amount</span>
-                          <span className="font-heading font-extrabold text-2xl text-forest-900">₦{isStudent ? '5,000' : '10,000'}</span>
+                          <span className="font-heading font-extrabold text-2xl text-forest-900">₦3,000</span>
                         </div>
                       </div>
                     </div>

@@ -27,7 +27,7 @@ model Delegate {
   organization  String?
   
   // Payment info
-  amount        Int      @default(5000)
+  amount        Int      @default(3000)
   status        String   @default("pending") // pending, paid, failed
   paystackRef   String?  @unique
   
@@ -59,6 +59,20 @@ model Admin {
   role      String   @default("ADMIN") // SUPER_ADMIN, ADMIN
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  
+  auditLogs AuditLog[]
+}
+
+model AuditLog {
+  id        String   @id @default(cuid())
+  adminId   String?
+  adminName String
+  action    String
+  details   Json?
+  ip        String?
+  createdAt DateTime @default(now())
+
+  admin     Admin?   @relation(fields: [adminId], references: [id])
 }
 
 model AdminInvitation {

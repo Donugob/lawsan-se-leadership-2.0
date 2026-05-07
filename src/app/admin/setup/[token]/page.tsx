@@ -45,6 +45,12 @@ export default function SetupPage() {
       return;
     }
 
+    const passwordRegex = /^(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{12,})/;
+    if (!passwordRegex.test(formData.password)) {
+      toast.error("Password must be at least 12 chars with a number and symbol.");
+      return;
+    }
+
     setSubmitting(true);
     try {
       const res = await fetch("/api/admin/auth/setup/complete", {

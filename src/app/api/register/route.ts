@@ -1,8 +1,22 @@
 import { NextResponse } from "next/server";
+import crypto from "crypto";
 import prisma from "@/lib/prisma";
+import { isRateLimited } from "@/lib/rate-limit";
+import { headers } from "next/headers";
 
 export async function POST(req: Request) {
   try {
+    const headersList = await headers();
+    const ip = headersList.get("x-forwarded-for") || "anonymous";
+    
+    // Limit: 5 registrations per hour per IP
+    if (isRateLimited(`reg_${ip}`, 5, 60 * 60 * 1000)) {
+      return NextResponse.json({ 
+        success: false, 
+        error: "Too many registration attempts. Please try again later." 
+      }, { status: 429 });
+    }
+
     const body = await req.json();
     const { 
       firstName, lastName, email, phone, 
@@ -22,7 +36,7 @@ export async function POST(req: Request) {
     }
 
     // 2. Generate LLC Reg ID if not exists
-    const regId = existing?.regId || `LLC-${Math.random().toString(36).substring(2, 8).toUpperCase()}`;
+    const regId = existing?.regId || `LLC-${crypto.randomBytes(3).toString("hex").toUpperCase()}`;
 
     // 3. Create or update delegate
     const delegate = await prisma.delegate.upsert({

@@ -10,6 +10,14 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
     }
 
+    // Password Policy: Min 12 chars, 1 number, 1 symbol
+    const passwordRegex = /^(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{12,})/;
+    if (!passwordRegex.test(password)) {
+      return NextResponse.json({ 
+        error: "Password must be at least 12 characters long and include at least one number and one symbol." 
+      }, { status: 400 });
+    }
+
     const invitation = await prisma.adminInvitation.findUnique({
       where: { token },
     });

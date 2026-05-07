@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import React from "react";
 import crypto from "crypto";
 import prisma from "@/lib/prisma";
+import { logAdminAction } from "@/lib/audit";
 
 export async function POST(req: Request) {
   try {
@@ -19,7 +20,11 @@ export async function POST(req: Request) {
       .update(body)
       .digest("hex");
 
-    if (hash !== signature) {
+    // Timing-safe comparison to prevent timing attacks
+    const hashBuffer = Buffer.from(hash, 'hex');
+    const signatureBuffer = Buffer.from(signature, 'hex');
+
+    if (hashBuffer.length !== signatureBuffer.length || !crypto.timingSafeEqual(hashBuffer, signatureBuffer)) {
       console.error("❌ Paystack Webhook Error: Invalid signature received.");
       return NextResponse.json({ error: "Invalid signature" }, { status: 401 });
     }
@@ -52,18 +57,25 @@ export async function POST(req: Request) {
 
     // 2. Business Logic: Update Delegate status
     if (event.event === "charge.success") {
-      const { reference, customer } = data;
-      const email = customer.email;
+      const { reference, metadata } = data;
+      const regId = metadata?.reg_id;
+
+      if (!regId) {
+        console.error("❌ Paystack Webhook Error: reg_id missing in metadata.");
+        return NextResponse.json({ error: "reg_id missing" }, { status: 400 });
+      }
 
       const delegate = await prisma.delegate.update({
-        where: { email },
+        where: { regId },
         data: {
           status: "paid",
           paystackRef: reference
         }
       });
       
-      console.log(`✅ Delegate Verified: ${email} marked as PAID.`);
+      console.log(`✅ Delegate Verified: ${regId} marked as PAID.`);
+
+      await logAdminAction("PAYMENT_VERIFIED", { regId, reference, email: delegate.email }, { adminName: "SYSTEM_PAYSTACK" });
 
       // 3. Email & PDF: Generate and send ticket
       try {

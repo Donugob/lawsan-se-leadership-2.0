@@ -3,6 +3,7 @@ import prisma from "@/lib/prisma";
 import { getSession } from "@/lib/auth";
 import crypto from "crypto";
 import { sendAdminInvitationEmail } from "@/lib/resend";
+import { logAdminAction } from "@/lib/audit";
 
 export async function POST(req: Request) {
   try {
@@ -48,6 +49,8 @@ export async function POST(req: Request) {
     const setupUrl = `${protocol}://${host}/admin/setup/${token}`;
     
     await sendAdminInvitationEmail({ email, name: name || 'Colleague', setupUrl });
+
+    await logAdminAction("INVITE_ADMIN", { invitedEmail: email, role: "ADMIN" });
 
     return NextResponse.json({ success: true });
   } catch (error) {

@@ -51,7 +51,7 @@ export default function SettingsPage() {
       icon: Database,
       fields: [
         { label: "Event Name", value: "Lawsan SE Leadership Conference 2.0" },
-        { label: "Registration Fee", value: "₦5,000 / ₦10,000" },
+        { label: "Registration Fee", value: "₦3,000 Flat Rate" },
         { label: "Venue", value: "Godfrey Okoye University, Enugu" },
       ]
     },

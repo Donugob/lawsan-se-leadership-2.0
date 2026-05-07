@@ -2,9 +2,9 @@ import { Resend } from 'resend';
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
-export async function sendTicketEmail({ email, firstName, regId, pdfBuffer }: { 
-  email: string, 
-  firstName: string, 
+export async function sendTicketEmail({ email, firstName, regId, pdfBuffer }: {
+  email: string,
+  firstName: string,
   regId: string,
   pdfBuffer: Buffer
 }) {
@@ -138,7 +138,7 @@ export async function sendAdminInvitationEmail({ email, name, setupUrl }: {
                   <tr>
                     <td style="padding: 60px 40px; text-align: center;">
                       <div style="width: 64px; height: 64px; background-color: #d4ba54; border-radius: 20px; display: inline-block; margin-bottom: 30px;">
-                        <img src="https://lawsanse.org/shield-gold.png" alt="🛡️" style="width: 32px; height: 32px; margin-top: 16px;" />
+                        <img src="https://i.postimg.cc/kg9csQNq/logo2.png" alt="🛡️" style="width: 32px; height: 32px; margin-top: 16px;" />
                       </div>
                       <h1 style="color: #d4ba54; font-family: 'Playfair Display', serif; font-size: 28px; margin: 0; margin-bottom: 12px;">Admin Invitation</h1>
                       <p style="color: #9bcbac; font-size: 16px; line-height: 1.6; margin-bottom: 40px;">
