@@ -71,7 +71,7 @@ export async function POST(req: Request) {
         const { DelegateTicket } = await import('@/components/pdf/DelegateTicket');
         const { sendTicketEmail } = await import('@/lib/resend');
 
-        const pdfBuffer = await renderToBuffer(<DelegateTicket delegate={delegate as any} />);
+        const pdfBuffer = await renderToBuffer(<DelegateTicket delegate={delegate as any} /> as any);
         
         await sendTicketEmail({
           email: delegate.email,

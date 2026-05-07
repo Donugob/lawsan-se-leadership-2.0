@@ -21,7 +21,7 @@ export async function GET(req: Request) {
       return NextResponse.json({ error: "Delegate not found or payment not confirmed" }, { status: 404 });
     }
 
-    const pdfBuffer = await renderToBuffer(React.createElement(DelegateTicket, { delegate: delegate as any }));
+    const pdfBuffer = await renderToBuffer(React.createElement(DelegateTicket, { delegate: delegate as any }) as any);
 
     return new Response(pdfBuffer, {
       headers: {
