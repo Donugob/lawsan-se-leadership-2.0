@@ -6,7 +6,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { useRouter } from "next/navigation";
-import { ArrowLeft, ArrowRight, CheckCircle2, Building, User, CreditCard, Briefcase, GraduationCap, ShieldCheck, AlertCircle } from "lucide-react";
+import { ArrowLeft, ArrowRight, CheckCircle2, Building, User, CreditCard, Briefcase, GraduationCap, ShieldCheck, AlertCircle, Mail } from "lucide-react";
 import Link from "next/link";
 import toast from "react-hot-toast";
 
@@ -217,8 +217,11 @@ export default function RegisterPage() {
                     </p>
 
                     <div className="bg-white p-6 rounded-2xl border border-forest-100 mb-8 shadow-sm">
-                      <span className="text-[10px] uppercase tracking-widest font-bold text-forest-400 block mb-1">Registration ID</span>
-                      <span className="text-3xl font-heading font-bold text-forest-900 tracking-tight">#{alreadyRegistered.regId}</span>
+                      <span className="text-[10px] uppercase tracking-widest font-bold text-forest-400 block mb-1">Status</span>
+                      <span className="text-2xl font-heading font-bold text-forest-900 tracking-tight flex items-center justify-center gap-2">
+                        <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
+                        CONFIRMED
+                      </span>
                     </div>
                   </div>
 
