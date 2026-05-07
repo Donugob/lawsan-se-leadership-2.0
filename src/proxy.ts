@@ -1,28 +1,54 @@
-import { NextRequest, NextResponse } from "next/server";
-import { decrypt } from "@/lib/auth";
+import { NextResponse } from "next/server";
+import type { NextRequest } from "next/server";
+import { decrypt } from "./lib/auth";
 
+/**
+ * Proxy (formerly Middleware) for Next.js 16
+ * Renamed to proxy per Next.js 16 file convention requirements.
+ */
 export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
-  // Protect all /admin routes except /admin/login and /admin/setup
-  if (pathname.startsWith("/admin")) {
-    // Allow login page and setup links
-    if (pathname === "/admin/login" || pathname.startsWith("/admin/setup")) {
+  // Define paths that require Admin authentication
+  const isAdminPath = pathname.startsWith("/admin");
+  const isAdminApiPath = pathname.startsWith("/api/admin");
+
+  if (isAdminPath || isAdminApiPath) {
+    // Exclude login and setup paths
+    if (
+      pathname === "/admin/login" || 
+      pathname.startsWith("/admin/setup") ||
+      pathname.startsWith("/api/admin/auth") // Allow auth APIs if any
+    ) {
       return NextResponse.next();
     }
 
     const session = request.cookies.get("session")?.value;
 
     if (!session) {
+      if (isAdminApiPath) {
+        return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      }
       return NextResponse.redirect(new URL("/admin/login", request.url));
     }
 
     try {
-      await decrypt(session);
+      const payload = await decrypt(session);
+      if (!payload || !payload.admin) {
+        throw new Error("Invalid session");
+      }
       return NextResponse.next();
-    } catch (err) {
-      console.error("Auth middleware error:", err);
-      return NextResponse.redirect(new URL("/admin/login", request.url));
+    } catch (error) {
+      console.error("Session verification failed:", error);
+      // Clear invalid cookie and redirect/return error
+      if (isAdminApiPath) {
+        const response = NextResponse.json({ error: "Invalid session" }, { status: 401 });
+        response.cookies.delete("session");
+        return response;
+      }
+      const response = NextResponse.redirect(new URL("/admin/login", request.url));
+      response.cookies.delete("session");
+      return response;
     }
   }
 
@@ -30,5 +56,8 @@ export async function proxy(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/admin/:path*"],
+  matcher: [
+    "/admin/:path*",
+    "/api/admin/:path*"
+  ],
 };
