@@ -9,8 +9,9 @@ export async function sendTicketEmail({ email, firstName, regId, pdfBuffer }: {
   pdfBuffer: Buffer
 }) {
   try {
+    const fromDomain = process.env.RESEND_FROM_DOMAIN || 'lawsanse.org';
     const { data, error } = await resend.emails.send({
-      from: 'Leadership Conference <no-reply@lawsanse.org>',
+      from: `Leadership Conference <no-reply@${fromDomain}>`,
       to: [email],
       subject: 'Your Registration is Confirmed! 🎟️',
       html: `

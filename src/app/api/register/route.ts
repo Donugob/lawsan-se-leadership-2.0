@@ -15,7 +15,9 @@ export async function POST(req: Request) {
     if (existing?.status === "paid") {
       return NextResponse.json({ 
         success: false, 
-        error: "This email address is already registered and verified." 
+        error: "This email address is already registered.",
+        code: "ALREADY_REGISTERED",
+        regId: existing.regId
       }, { status: 400 });
     }
 

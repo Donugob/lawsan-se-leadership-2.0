@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Playfair_Display, Outfit } from "next/font/google";
 import "./globals.css";
+import { ToasterProvider } from "@/components/providers/ToasterProvider";
 
 const playfair = Playfair_Display({
   variable: "--font-heading",
@@ -27,6 +28,7 @@ export default function RootLayout({
       <body
         className={`${playfair.variable} ${outfit.variable} antialiased`}
       >
+        <ToasterProvider />
         {children}
       </body>
     </html>

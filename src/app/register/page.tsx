@@ -8,6 +8,7 @@ import * as z from "zod";
 import { useRouter } from "next/navigation";
 import { ArrowLeft, ArrowRight, CheckCircle2, Building, User, CreditCard, Briefcase, GraduationCap, ShieldCheck, AlertCircle } from "lucide-react";
 import Link from "next/link";
+import toast from "react-hot-toast";
 
 const formSchema = z.object({
   firstName: z.string().min(2, "First name is required"),
@@ -48,6 +49,7 @@ export default function RegisterPage() {
   const [step, setStep] = useState(1);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [alreadyRegistered, setAlreadyRegistered] = useState<{ regId: string; email: string } | null>(null);
 
   // Load Paystack Script
   useEffect(() => {
@@ -107,6 +109,12 @@ export default function RegisterPage() {
       const result = await regResponse.json();
 
       if (!regResponse.ok) {
+        if (result.code === "ALREADY_REGISTERED") {
+          setAlreadyRegistered({ regId: result.regId, email: data.email });
+          toast.success("Welcome back! Your registration is already confirmed.");
+          setIsSubmitting(false);
+          return;
+        }
         throw new Error(result.error || "Failed to initialize registration");
       }
 
@@ -143,6 +151,7 @@ export default function RegisterPage() {
     } catch (e: any) {
       setIsSubmitting(false);
       setError(e.message || 'Error initializing registration. Please try again.');
+      toast.error(e.message || 'Error initializing registration');
     }
   };
 
@@ -187,19 +196,52 @@ export default function RegisterPage() {
             </div>
           </div>
 
-          <div className="p-6 md:p-10 bg-cream-50/50">
-            {error && (
-              <div className="mb-6 p-4 bg-red-50 border border-red-100 rounded-2xl flex items-start gap-3">
-                <AlertCircle className="w-5 h-5 text-red-500 shrink-0 mt-0.5" />
-                <p className="text-sm text-red-600 font-medium">{error}</p>
-              </div>
-            )}
+          <div className="p-8 md:p-10 bg-cream-50/50">
+            <AnimatePresence mode="wait">
+              {alreadyRegistered ? (
+                <motion.div 
+                  key="already-registered"
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  className="space-y-8 text-center py-6"
+                >
+                  <div className="w-20 h-20 bg-forest-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                    <CheckCircle2 className="w-10 h-10 text-forest-900" />
+                  </div>
+                  <div>
+                    <h2 className="text-2xl font-heading font-bold text-forest-900 mb-2">Registration Found</h2>
+                    <p className="text-forest-600 mb-8 max-w-sm mx-auto">
+                      Our records show that <strong>{alreadyRegistered.email}</strong> is already registered and confirmed.
+                    </p>
 
-            <form onSubmit={handleSubmit(onSubmit)}>
-              <AnimatePresence mode="wait">
-                {/* STEP 1 */}
-                {step === 1 && (
-                  <motion.div key="step1" variants={stepVariants} initial="hidden" animate="visible" exit="exit" className="space-y-5 md:space-y-6">
+                    <div className="bg-white p-6 rounded-2xl border border-forest-100 mb-8 shadow-sm">
+                      <span className="text-[10px] uppercase tracking-widest font-bold text-forest-400 block mb-1">Registration ID</span>
+                      <span className="text-3xl font-heading font-bold text-forest-900 tracking-tight">#{alreadyRegistered.regId}</span>
+                    </div>
+                  </div>
+
+                  <div className="space-y-4">
+                    <Link 
+                      href={`/success?regId=${alreadyRegistered.regId}`}
+                      className="w-full bg-forest-900 text-white py-4 rounded-2xl font-bold flex items-center justify-center gap-3 hover:bg-forest-800 transition-all shadow-xl shadow-forest-900/10"
+                    >
+                      View & Download Ticket
+                      <ArrowRight className="w-5 h-5" />
+                    </Link>
+                    <button 
+                      onClick={() => setAlreadyRegistered(null)}
+                      className="w-full bg-white border border-forest-100 text-forest-600 py-4 rounded-2xl font-bold text-sm hover:bg-forest-50 transition-all"
+                    >
+                      Register another email
+                    </button>
+                  </div>
+                </motion.div>
+              ) : (
+                <form onSubmit={handleSubmit(onSubmit)}>
+                  <AnimatePresence mode="wait">
+                    {/* STEP 1 */}
+                    {step === 1 && (
+                      <motion.div key="step1" variants={stepVariants} initial="hidden" animate="visible" exit="exit" className="space-y-5 md:space-y-6">
                     <div className="flex items-center gap-3 mb-6 pb-4 border-b border-forest-100">
                       <div className="w-10 h-10 rounded-full bg-gold-100 flex items-center justify-center">
                         <User className="w-5 h-5 text-gold-700" />
@@ -385,7 +427,9 @@ export default function RegisterPage() {
                   </motion.div>
                 )}
               </AnimatePresence>
-            </form>
+                </form>
+              )}
+            </AnimatePresence>
           </div>
         </div>
       </div>
