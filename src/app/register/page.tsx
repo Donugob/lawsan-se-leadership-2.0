@@ -49,7 +49,8 @@ export default function RegisterPage() {
   const [step, setStep] = useState(1);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [alreadyRegistered, setAlreadyRegistered] = useState<{ regId: string; email: string } | null>(null);
+  const [alreadyRegistered, setAlreadyRegistered] = useState<{ email: string } | null>(null);
+  const [resendLoading, setResendLoading] = useState(false);
 
   // Load Paystack Script
   useEffect(() => {
@@ -110,8 +111,8 @@ export default function RegisterPage() {
 
       if (!regResponse.ok) {
         if (result.code === "ALREADY_REGISTERED") {
-          setAlreadyRegistered({ regId: result.regId, email: data.email });
-          toast.success("Welcome back! Your registration is already confirmed.");
+          setAlreadyRegistered({ email: data.email });
+          toast.success("This email is already registered. You can resend your ticket below.");
           setIsSubmitting(false);
           return;
         }
@@ -140,8 +141,8 @@ export default function RegisterPage() {
         },
         callback: function (response: any) {
           setIsSubmitting(false);
-          // Success! Redirect to success page with the ACTUAL regId and ref
-          router.push(`/success?regId=${result.regId}&ref=${response.reference}`);
+          // Success! Redirect with email for verification
+          router.push(`/success?regId=${result.regId}&ref=${response.reference}&email=${encodeURIComponent(data.email)}`);
         },
         onClose: function () {
           setIsSubmitting(false);
@@ -222,13 +223,33 @@ export default function RegisterPage() {
                   </div>
 
                   <div className="space-y-4">
-                    <Link 
-                      href={`/success?regId=${alreadyRegistered.regId}`}
-                      className="w-full bg-forest-900 text-white py-4 rounded-2xl font-bold flex items-center justify-center gap-3 hover:bg-forest-800 transition-all shadow-xl shadow-forest-900/10"
+                    <p className="text-xs text-forest-400 italic">
+                      Check your Spam or Junk folder if you haven't seen your ticket.
+                    </p>
+                    <button 
+                      onClick={async () => {
+                        setResendLoading(true);
+                        try {
+                          const res = await fetch("/api/register/resend", {
+                            method: "POST",
+                            headers: { "Content-Type": "application/json" },
+                            body: JSON.stringify({ email: alreadyRegistered.email }),
+                          });
+                          const resData = await res.json();
+                          if (res.ok) toast.success(resData.message);
+                          else toast.error(resData.error);
+                        } catch (err) {
+                          toast.error("Failed to resend ticket.");
+                        } finally {
+                          setResendLoading(false);
+                        }
+                      }}
+                      disabled={resendLoading}
+                      className="w-full bg-forest-900 text-white py-4 rounded-2xl font-bold flex items-center justify-center gap-3 hover:bg-forest-800 transition-all shadow-xl shadow-forest-900/10 disabled:opacity-50"
                     >
-                      View & Download Ticket
-                      <ArrowRight className="w-5 h-5" />
-                    </Link>
+                      {resendLoading ? "Sending..." : "Resend My Ticket"}
+                      <Mail className="w-5 h-5" />
+                    </button>
                     <button 
                       onClick={() => setAlreadyRegistered(null)}
                       className="w-full bg-white border border-forest-100 text-forest-600 py-4 rounded-2xl font-bold text-sm hover:bg-forest-50 transition-all"

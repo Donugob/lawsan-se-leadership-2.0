@@ -4,6 +4,8 @@ import { Search, Filter, Download, UserPlus, MoreHorizontal } from "lucide-react
 import Link from "next/link";
 import prisma from "@/lib/prisma";
 import { Delegate } from "@prisma/client";
+import { getSession } from "@/lib/auth";
+import { redirect } from "next/navigation";
 
 // Explicitly type the return as Promise<Delegate[]>
 async function getDelegates(search?: string, status?: string, type?: string): Promise<Delegate[]> {
@@ -48,6 +50,9 @@ export default async function DelegatesPage({
 }: {
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>
 }) {
+  const session = await getSession();
+  if (!session) redirect("/admin/login");
+
   const params = await searchParams;
   const query = typeof params.q === 'string' ? params.q : undefined;
   const status = typeof params.status === 'string' ? params.status : 'paid';

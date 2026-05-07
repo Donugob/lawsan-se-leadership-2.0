@@ -1,6 +1,7 @@
 import { SignJWT, jwtVerify } from "jose";
 import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
+import prisma from "./prisma";
 
 const secretKey = process.env.JWT_SECRET;
 if (!secretKey) {
@@ -8,11 +9,10 @@ if (!secretKey) {
 }
 const key = new TextEncoder().encode(secretKey);
 
-export async function encrypt(payload: any) {
   return await new SignJWT(payload)
     .setProtectedHeader({ alg: "HS256" })
     .setIssuedAt()
-    .setExpirationTime("24h")
+    .setExpirationTime("8h") // Reduced from 24h to 8h for security
     .sign(key);
 }
 
@@ -24,7 +24,7 @@ export async function decrypt(input: string): Promise<any> {
 }
 
 export async function login(admin: { id: string; email: string; role: string; name: string }) {
-  const expires = new Date(Date.now() + 24 * 60 * 60 * 1000); // 24 hours
+  const expires = new Date(Date.now() + 8 * 60 * 60 * 1000); // 8 hours
   const session = await encrypt({ admin, expires });
 
   (await cookies()).set("session", session, { 
@@ -44,7 +44,17 @@ export async function getSession() {
   const session = (await cookies()).get("session")?.value;
   if (!session) return null;
   try {
-    return await decrypt(session);
+    const payload = await decrypt(session);
+    
+    // Best Practice: Verify user still exists in DB
+    const admin = await prisma.admin.findUnique({
+      where: { id: payload.admin.id },
+      select: { id: true, email: true, role: true, name: true }
+    });
+
+    if (!admin) return null;
+    
+    return payload;
   } catch (err) {
     return null;
   }

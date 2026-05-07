@@ -10,6 +10,7 @@ import toast from "react-hot-toast";
 function SuccessContent() {
   const searchParams = useSearchParams();
   const regId = searchParams.get("regId");
+  const email = searchParams.get("email");
   const reference = searchParams.get("ref") || "DIRECT_ACCESS";
   
   const [status, setStatus] = useState<"loading" | "confirmed" | "error">("loading");
@@ -19,7 +20,7 @@ function SuccessContent() {
     if (!regId) return;
     
     try {
-      const res = await fetch(`/api/register/status?regId=${regId}`);
+      const res = await fetch(`/api/register/status?regId=${regId}&email=${encodeURIComponent(email || "")}`);
       const data = await res.json();
       
       if (data.status === "paid") {
@@ -152,7 +153,7 @@ function SuccessContent() {
           {/* Action Buttons */}
           <div className="flex flex-col sm:flex-row gap-4">
             <a 
-              href={`/api/ticket/download?regId=${regId}`}
+              href={`/api/ticket/download?regId=${regId}&email=${encodeURIComponent(email || "")}`}
               className="flex-1 bg-[#06160b] text-white py-4 rounded-2xl font-extrabold flex items-center justify-center gap-3 transition-all shadow-xl shadow-forest-900/10 active:scale-95 group"
             >
               <Download className="w-5 h-5 group-hover:translate-y-0.5 transition-transform" />

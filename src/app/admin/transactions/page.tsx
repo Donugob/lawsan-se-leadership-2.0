@@ -2,6 +2,8 @@ export const dynamic = 'force-dynamic';
 
 import prisma from "@/lib/prisma";
 import { CreditCard, Download, Search, Filter } from "lucide-react";
+import { getSession } from "@/lib/auth";
+import { redirect } from "next/navigation";
 
 async function getTransactions(search?: string) {
   return await prisma.delegate.findMany({
@@ -23,6 +25,9 @@ export default async function TransactionsPage({
 }: {
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>
 }) {
+  const session = await getSession();
+  if (!session) redirect("/admin/login");
+
   const params = await searchParams;
   const query = typeof params.q === 'string' ? params.q : undefined;
   const transactions = await getTransactions(query);

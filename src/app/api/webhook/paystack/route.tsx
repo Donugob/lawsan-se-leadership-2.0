@@ -65,6 +65,19 @@ export async function POST(req: Request) {
         return NextResponse.json({ error: "reg_id missing" }, { status: 400 });
       }
 
+      const EXPECTED_AMOUNT_KOBO = 315000; // ₦3,150
+      if (data.amount !== EXPECTED_AMOUNT_KOBO) {
+        console.error(`⚠️ FRAUD ATTEMPT: Received ₦${data.amount/100} for regId ${regId}. Expected ₦3,150.`);
+        await logAdminAction("FRAUD_ATTEMPT", { 
+          regId, 
+          reference, 
+          receivedAmount: data.amount/100, 
+          expectedAmount: 3150 
+        }, { adminName: "SYSTEM_SECURITY" });
+        
+        return NextResponse.json({ error: "Invalid payment amount" }, { status: 400 });
+      }
+
       const delegate = await prisma.delegate.update({
         where: { regId },
         data: {

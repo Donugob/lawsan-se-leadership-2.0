@@ -2,6 +2,8 @@ export const dynamic = 'force-dynamic';
 
 import AdminDashboardClient from "@/components/admin/DashboardClient";
 import prisma from "@/lib/prisma";
+import { getSession } from "@/lib/auth";
+import { redirect } from "next/navigation";
 
 async function getStats() {
   const paidDelegates = await prisma.delegate.findMany({
@@ -40,6 +42,9 @@ async function getRecentDelegates() {
 }
 
 export default async function AdminOverview() {
+  const session = await getSession();
+  if (!session) redirect("/admin/login");
+
   const stats = await getStats();
   const recentDelegates = await getRecentDelegates();
 

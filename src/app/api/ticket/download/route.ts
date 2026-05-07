@@ -8,17 +8,18 @@ export async function GET(req: Request) {
   try {
     const { searchParams } = new URL(req.url);
     const regId = searchParams.get("regId");
+    const email = searchParams.get("email");
 
-    if (!regId) {
-      return NextResponse.json({ error: "Registration ID is required" }, { status: 400 });
+    if (!regId || !email) {
+      return NextResponse.json({ error: "Registration ID and Email are required" }, { status: 400 });
     }
 
     const delegate = await prisma.delegate.findUnique({
       where: { regId }
     });
 
-    if (!delegate || delegate.status !== "paid") {
-      return NextResponse.json({ error: "Delegate not found or payment not confirmed" }, { status: 404 });
+    if (!delegate || delegate.status !== "paid" || delegate.email.toLowerCase() !== email.toLowerCase()) {
+      return NextResponse.json({ error: "Delegate not found or verification failed" }, { status: 404 });
     }
 
     const pdfBuffer = await renderToBuffer(React.createElement(DelegateTicket, { delegate: delegate as any }) as any);
