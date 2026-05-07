@@ -14,8 +14,40 @@ const outfit = Outfit({
 });
 
 export const metadata: Metadata = {
-  title: "Lawsan SE Leadership Conference 2.0",
-  description: "Emerging Lawyers, Emerging Realities. Registration and information portal for the Lawsan South East Leadership Conference in Enugu.",
+  metadataBase: new URL("https://lawsan-leadership.vercel.app"),
+  title: {
+    default: "Lawsan SE Leadership Conference 2.0",
+    template: "%s | Lawsan SE 2.0"
+  },
+  description: "Emerging Lawyers, Emerging Realities. Join the premier gathering of future legal leaders in South East Nigeria at Godfrey Okoye University, Enugu.",
+  keywords: ["Lawsan SE", "Leadership Conference 2.0", "Godfrey Okoye University", "Enugu Law Students", "Nigerian Law Students"],
+  authors: [{ name: "Lawsan SE" }],
+  creator: "Lawsan SE",
+  openGraph: {
+    type: "website",
+    locale: "en_NG",
+    url: "https://lawsan-leadership.vercel.app",
+    title: "Lawsan SE Leadership Conference 2.0 | Excellence in Motion",
+    description: "Emerging Lawyers, Emerging Realities. Register now for the premier legal leadership event in Enugu.",
+    siteName: "Lawsan SE 2.0",
+    images: [
+      {
+        url: "https://i.postimg.cc/R0dd7Hkt/8017b435-46e1-481f-bcdc-ac8dac50ecf0.jpg",
+        width: 1200,
+        height: 630,
+        alt: "Lawsan SE Leadership Conference 2.0 Banner",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Lawsan SE Leadership Conference 2.0",
+    description: "Emerging Lawyers, Emerging Realities. June 6th, 2026.",
+    images: ["https://i.postimg.cc/R0dd7Hkt/8017b435-46e1-481f-bcdc-ac8dac50ecf0.jpg"],
+  },
+  alternates: {
+    canonical: "/",
+  },
 };
 
 export default function RootLayout({

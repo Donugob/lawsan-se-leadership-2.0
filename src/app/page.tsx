@@ -15,6 +15,7 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { useRef } from "react";
+import EventSchema from "@/components/seo/EventSchema";
 
 const fadeIn = {
   initial: { opacity: 0, y: 30 },
@@ -42,12 +43,13 @@ export default function LandingPage() {
 
   return (
     <div ref={containerRef} className="bg-cream min-h-screen selection:bg-gold-500 selection:text-white scroll-pt-32 md:scroll-pt-40">
+      <EventSchema />
       {/* Navigation */}
       <nav className="fixed top-0 w-full z-50 px-6 py-8">
         <div className="max-w-7xl mx-auto flex justify-between items-center bg-white/70 backdrop-blur-xl border border-forest-100/50 px-8 py-4 rounded-3xl shadow-sm">
           <Link href="/" className="flex items-center gap-3 group">
             <div className="w-10 h-10 transition-transform group-hover:scale-110">
-              <img src="https://i.postimg.cc/kg9csQNq/logo2.png" alt="LAWSAN SE" className="w-full h-full object-contain" />
+              <img src="https://i.postimg.cc/kg9csQNq/logo2.png" alt="Lawsan SE Leadership Conference 2.0 Logo" className="w-full h-full object-contain" />
             </div>
             <div>
               <span className="font-heading font-bold text-forest-950 tracking-tight text-xl block leading-none">LAWSAN SE</span>
@@ -110,7 +112,7 @@ export default function LandingPage() {
                 <div className="flex -space-x-4">
                   {[1, 2, 3, 4].map(i => (
                     <div key={i} className="w-10 h-10 rounded-full border-2 border-white bg-forest-100 overflow-hidden shadow-sm">
-                      <img src={`https://i.pravatar.cc/150?u=${i}`} alt="Attendee" className="w-full h-full object-cover" />
+                      <img src={`https://i.pravatar.cc/150?u=${i}`} alt="Lawsan SE Conference Delegate" className="w-full h-full object-cover" />
                     </div>
                   ))}
                 </div>
@@ -129,7 +131,7 @@ export default function LandingPage() {
               <div className="absolute inset-0 bg-forest-900/10 mix-blend-overlay" />
               <img
                 src="https://i.postimg.cc/NfXJpGWX/about-mission.jpg"
-                alt="Law"
+                alt="Legal Excellence and Leadership Vision"
                 className="w-full h-full object-cover"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-forest-950/60 to-transparent" />
@@ -257,7 +259,7 @@ export default function LandingPage() {
                   className="space-y-6 relative z-20 md:pt-24 lg:pt-32"
                 >
                   <div className="aspect-[3/4] rounded-[2.5rem] md:rounded-[3rem] overflow-hidden bg-forest-900 relative shadow-2xl rotate-[-2deg] md:rotate-0 hover:rotate-0 transition-transform duration-500">
-                    <img src="https://i.postimg.cc/fTQSnS7d/hero-bg.jpg" className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700" alt="Law" />
+                    <img src="https://i.postimg.cc/fTQSnS7d/hero-bg.jpg" className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700" alt="Ethical Legal Leadership" />
                     <div className="absolute inset-0 bg-forest-950/20" />
                   </div>
                   <div className="p-2 md:p-4">
@@ -274,7 +276,7 @@ export default function LandingPage() {
                   className="space-y-6 relative z-10 -mt-12 md:mt-0"
                 >
                   <div className="aspect-[3/4] rounded-[2.5rem] md:rounded-[3rem] overflow-hidden bg-forest-900 relative shadow-2xl rotate-[3deg] md:rotate-0 hover:rotate-0 transition-transform duration-500 translate-y-12 md:translate-y-0">
-                    <img src="https://i.postimg.cc/hPnv3WgX/gavel-placeholder-2.jpg" className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700" alt="Law" />
+                    <img src="https://i.postimg.cc/hPnv3WgX/gavel-placeholder-2.jpg" className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700" alt="Legal Innovation and Advocacy" />
                     <div className="absolute inset-0 bg-forest-950/20" />
                   </div>
                   <div className="p-2 md:p-4 translate-y-12 md:translate-y-0">
@@ -376,7 +378,7 @@ export default function LandingPage() {
                   whileInView={{ scale: 1, opacity: 1 }}
                   className="rounded-[4rem] overflow-hidden shadow-3xl"
                 >
-                  <img src="https://i.postimg.cc/6qNgwh5Y/GOU.jpg" alt="University" className="w-full aspect-video object-cover" />
+                  <img src="https://i.postimg.cc/6qNgwh5Y/GOU.jpg" alt="Godfrey Okoye University Enugu - Conference Venue" className="w-full aspect-video object-cover" />
                 </motion.div>
                 <div className="absolute -bottom-10 -right-10 bg-forest-900 text-white p-12 rounded-[3rem] shadow-2xl hidden md:block">
                   <p className="text-4xl font-heading font-bold text-gold-400 mb-2">Enugu</p>
