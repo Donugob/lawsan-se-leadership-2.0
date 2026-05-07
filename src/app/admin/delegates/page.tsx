@@ -115,10 +115,6 @@ export default async function DelegatesPage({
             <select 
               name="type"
               defaultValue={type}
-              onChange={(e) => {
-                const val = e.target.value;
-                window.location.href = `/admin/delegates?status=${status}${query ? `&q=${query}` : ''}${val !== 'all' ? `&type=${val}` : ''}`;
-              }}
               className="w-full px-4 py-2.5 bg-forest-50 border border-forest-100 rounded-xl focus:outline-none focus:ring-2 focus:ring-gold-500 transition-all text-sm font-medium"
             >
               <option value="all">All Categories</option>
