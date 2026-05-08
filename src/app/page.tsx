@@ -110,14 +110,19 @@ export default function LandingPage() {
               </Link>
               <div className="flex items-center gap-4 px-6">
                 <div className="flex -space-x-4">
-                  {[1, 2, 3, 4].map(i => (
-                    <div key={i} className="w-10 h-10 rounded-full border-2 border-white bg-forest-100 overflow-hidden shadow-sm">
-                      <img src={`https://i.pravatar.cc/150?u=${i}`} alt="Lawsan SE Conference Delegate" className="w-full h-full object-cover" />
+                  {[
+                    "https://i.postimg.cc/CxgVvspS/1753032704-lawsaan-se.jpg",
+                    "https://i.postimg.cc/wjpdWQYM/1753271768-IMG-20250122-WA0103.jpg",
+                    "https://i.postimg.cc/m2rzk8J3/image.png",
+                    "https://i.postimg.cc/k5PhDty1/IMG-20251011-WA0113.jpg"
+                  ].map((src, index) => (
+                    <div key={index} className="w-10 h-10 rounded-full border-2 border-white bg-forest-100 overflow-hidden shadow-sm">
+                      <img src={src} alt={`Lawsan SE Conference Delegate ${index + 1}`} className="w-full h-full object-cover" />
                     </div>
                   ))}
                 </div>
                 <p className="text-xs text-forest-400 font-bold uppercase tracking-widest">
-                  800+ Registered
+                  1k+ Expected
                 </p>
               </div>
             </motion.div>
