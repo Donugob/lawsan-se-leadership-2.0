@@ -192,7 +192,7 @@ export const DelegateTicket = ({ delegate }: TicketProps) => (
             <View style={styles.eventDetails}>
               <View style={styles.eventItem}>
                 <Text style={styles.eventLabel}>Date & Time</Text>
-                <Text style={styles.eventValue}>6th June 2026 | 10:00 AM</Text>
+                <Text style={styles.eventValue}>4th June 2026 | 10:00 AM</Text>
               </View>
               <View style={styles.eventItem}>
                 <Text style={styles.eventLabel}>Venue</Text>

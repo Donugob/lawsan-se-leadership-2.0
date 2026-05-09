@@ -136,7 +136,7 @@ function SuccessContent() {
               <Calendar className="w-6 h-6 text-gold-500 shrink-0" />
               <div>
                 <p className="text-[10px] uppercase tracking-widest font-bold text-forest-400 mb-0.5">Date & Time</p>
-                <p className="text-sm font-bold text-forest-900">6th June, 2026</p>
+                <p className="text-sm font-bold text-forest-900">4th June, 2026</p>
                 <p className="text-[10px] text-forest-500 uppercase font-bold tracking-tighter">Starts 10:00 AM</p>
               </div>
             </div>

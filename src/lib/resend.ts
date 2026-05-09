@@ -59,7 +59,7 @@ export async function sendTicketEmail({ email, firstName, regId, pdfBuffer }: {
                         <tr>
                           <td style="padding-right: 20px;">
                             <div style="color: #d4ba54; font-size: 9px; font-weight: bold; text-transform: uppercase; margin-bottom: 4px;">Date</div>
-                            <div style="color: #081d0f; font-size: 14px; font-weight: bold;">6th June, 2026</div>
+                            <div style="color: #081d0f; font-size: 14px; font-weight: bold;">4th June, 2026</div>
                           </td>
                           <td>
                             <div style="color: #d4ba54; font-size: 9px; font-weight: bold; text-transform: uppercase; margin-bottom: 4px;">Venue</div>
