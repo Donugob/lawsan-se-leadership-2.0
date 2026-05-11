@@ -42,7 +42,7 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "Lawsan SE Leadership Conference 2.0",
-    description: "Emerging Lawyers, Emerging Realities. June 6th, 2026.",
+    description: "Emerging Lawyers, Emerging Realities. June 4th, 2026.",
     images: ["https://i.postimg.cc/R0dd7Hkt/8017b435-46e1-481f-bcdc-ac8dac50ecf0.jpg"],
   },
   alternates: {
