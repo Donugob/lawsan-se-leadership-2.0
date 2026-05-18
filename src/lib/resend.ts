@@ -68,6 +68,17 @@ export async function sendTicketEmail({ email, firstName, regId, pdfBuffer }: {
                         </tr>
                       </table>
                       
+                      <!-- WhatsApp Group Invitation -->
+                      <div style="background-color: #fbf8ed; border: 1px solid #c1decb; border-radius: 20px; padding: 28px; text-align: center; margin-bottom: 40px;">
+                        <h3 style="color: #081d0f; font-family: 'Playfair Display', serif; font-size: 18px; margin: 0; margin-bottom: 8px;">Join the Delegate Community</h3>
+                        <p style="color: #21753e; font-size: 12px; line-height: 1.5; margin: 0; margin-bottom: 20px;">
+                          Connect with fellow emerging lawyers, receive real-time conference updates, and participate in exclusive networking before the event.
+                        </p>
+                        <a href="https://chat.whatsapp.com/HNV6XqgqXedH2iEIUNGVsC?mode=gi_t" target="_blank" style="display: inline-block; background-color: #25D366; color: #ffffff; padding: 14px 28px; border-radius: 14px; text-decoration: none; font-weight: bold; font-size: 14px; box-shadow: 0 4px 12px rgba(37, 211, 102, 0.25);">
+                          Join Official WhatsApp Group
+                        </a>
+                      </div>
+                      
                       <div style="border-top: 1px solid #e7f0eb; padding-top: 30px; text-align: center;">
                         <p style="color: #081d0f; font-size: 12px; font-weight: bold; margin: 0;">LAWSAN South East Zone</p>
                         <p style="color: #b1b1b1; font-size: 10px; margin-top: 4px;">Powered by the Leadership Committee</p>
