@@ -218,11 +218,11 @@ export default function DelegatesListClient({ initialDelegates, status, type }: 
         {type !== 'professional' && (
           <div className="flex flex-col md:flex-row gap-4 pt-4 border-t border-forest-50">
             <div className="w-full md:w-1/3 flex items-center gap-2">
-              <span className="text-xs font-bold text-forest-400 uppercase tracking-widest w-16">State:</span>
+              <span className="text-xs font-bold text-forest-400 uppercase tracking-widest w-16 shrink-0">State:</span>
               <select 
                 value={selectedState}
                 onChange={handleStateChange}
-                className="flex-1 px-4 py-2 bg-white border border-forest-100 rounded-xl focus:outline-none focus:ring-2 focus:ring-gold-500 transition-all text-sm font-medium shadow-sm"
+                className="flex-1 min-w-0 truncate px-4 py-2 bg-white border border-forest-100 rounded-xl focus:outline-none focus:ring-2 focus:ring-gold-500 transition-all text-sm font-medium shadow-sm"
               >
                 {availableStates.map(st => (
                   <option key={st} value={st}>{st === "All" ? "All States" : st}</option>
@@ -231,11 +231,11 @@ export default function DelegatesListClient({ initialDelegates, status, type }: 
             </div>
             
             <div className="w-full md:w-1/3 flex items-center gap-2">
-              <span className="text-xs font-bold text-forest-400 uppercase tracking-widest w-16">School:</span>
+              <span className="text-xs font-bold text-forest-400 uppercase tracking-widest w-16 shrink-0">School:</span>
               <select 
                 value={selectedSchool}
                 onChange={(e) => setSelectedSchool(e.target.value)}
-                className="flex-1 px-4 py-2 bg-white border border-forest-100 rounded-xl focus:outline-none focus:ring-2 focus:ring-gold-500 transition-all text-sm font-medium shadow-sm"
+                className="flex-1 min-w-0 truncate px-4 py-2 bg-white border border-forest-100 rounded-xl focus:outline-none focus:ring-2 focus:ring-gold-500 transition-all text-sm font-medium shadow-sm"
               >
                 {availableSchools.map(sch => (
                   <option key={sch} value={sch}>{sch === "All" ? "All Universities" : sch}</option>
