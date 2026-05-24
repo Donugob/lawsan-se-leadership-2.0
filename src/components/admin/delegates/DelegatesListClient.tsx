@@ -230,7 +230,7 @@ export default function DelegatesListClient({ initialDelegates, status, type }: 
               </select>
             </div>
             
-            <div className="w-full md:w-2/3 flex items-center gap-2">
+            <div className="w-full md:w-1/3 flex items-center gap-2">
               <span className="text-xs font-bold text-forest-400 uppercase tracking-widest w-16">School:</span>
               <select 
                 value={selectedSchool}
