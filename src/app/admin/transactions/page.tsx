@@ -4,6 +4,7 @@ import prisma from "@/lib/prisma";
 import { CreditCard, Download, Search, Filter } from "lucide-react";
 import { getSession } from "@/lib/auth";
 import { redirect } from "next/navigation";
+import ReconcileButton from "@/components/admin/ReconcileButton";
 
 async function getTransactions(search?: string) {
   return await prisma.delegate.findMany({
@@ -63,6 +64,7 @@ export default async function TransactionsPage({
           />
         </form>
         <div className="flex gap-2">
+          <ReconcileButton />
           <button className="flex items-center gap-2 bg-white border border-forest-200 px-4 py-2.5 rounded-xl text-forest-700 font-medium hover:bg-forest-50 transition-colors">
             <Filter className="w-4 h-4" />
             Filter

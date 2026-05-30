@@ -3,6 +3,7 @@ import React from "react";
 import crypto from "crypto";
 import prisma from "@/lib/prisma";
 import { logAdminAction } from "@/lib/audit";
+import { fulfillRegistration } from "@/lib/payment";
 
 export async function POST(req: Request) {
   try {
@@ -78,39 +79,7 @@ export async function POST(req: Request) {
         return NextResponse.json({ error: "Invalid payment amount" }, { status: 400 });
       }
 
-      const delegate = await prisma.delegate.update({
-        where: { regId },
-        data: {
-          status: "paid",
-          paystackRef: reference
-        }
-      });
-      
-      console.log(`✅ Delegate Verified: ${regId} marked as PAID.`);
-
-      await logAdminAction("PAYMENT_VERIFIED", { regId, reference, email: delegate.email }, { adminName: "SYSTEM_PAYSTACK" });
-
-      // 3. Email & PDF: Generate and send ticket
-      try {
-        const { renderToBuffer } = await import('@react-pdf/renderer');
-        const { DelegateTicket } = await import('@/components/pdf/DelegateTicket');
-        const { sendTicketEmail } = await import('@/lib/resend');
-
-        const pdfBuffer = await renderToBuffer(<DelegateTicket delegate={delegate as any} /> as any);
-        
-        await sendTicketEmail({
-          email: delegate.email,
-          firstName: delegate.firstName,
-          regId: delegate.regId || "N/A",
-          pdfBuffer
-        });
-        
-        console.log(`📧 Ticket Email sent to: ${delegate.email}`);
-      } catch (emailError) {
-        console.error("❌ Failed to send ticket email:", emailError);
-        // We don't return error to Paystack so they don't retry unnecessarily 
-        // if the database part was successful
-      }
+      await fulfillRegistration(regId, reference, "SYSTEM_PAYSTACK");
     }
 
     return NextResponse.json({ received: true });
